@@ -31,8 +31,8 @@ html,body{height:100%;}
 body{position:fixed;inset:0;overflow:hidden;background:#fff;color:#1c1c1e;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.3;
   -webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-user-select:none;user-select:none;
-  --dot:rgba(0,0,0,.2);--panel:rgba(255,255,255,.94);--b:rgba(0,0,0,.09);--h:rgba(0,0,0,.06);--sel:#2f8cf5;}
-:root.dark body{background:#1b1b1d;color:#ececec;--dot:rgba(255,255,255,.16);--panel:rgba(44,44,46,.95);--b:rgba(255,255,255,.12);--h:rgba(255,255,255,.09);}
+  --dot:rgba(0,0,0,.2);--panel:rgba(255,255,255,.94);--b:rgba(0,0,0,.09);--h:rgba(0,0,0,.06);--sel:#2f8cf5;--solid:#fff;}
+:root.dark body{background:#1b1b1d;color:#ececec;--dot:rgba(255,255,255,.16);--panel:rgba(44,44,46,.95);--b:rgba(255,255,255,.12);--h:rgba(255,255,255,.09);--solid:#2c2c2e;}
 button,input{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0;}
 svg{display:block;}
 #app{position:absolute;inset:0;display:flex;flex-direction:column;}
@@ -82,9 +82,40 @@ svg{display:block;}
 .card b{display:block;font-size:15px;}
 .card .an{display:block;font-size:13px;opacity:.75;margin-top:3px;line-height:1.3;}
 .card .sb{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.55;margin-top:6px;}
-.card .ck{position:absolute;right:6px;top:6px;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(255,255,255,.55);}
-.card .ck:hover{background:rgba(255,255,255,.9);}
-.card .ck.on{background:#34c759;color:#fff;}
+.card .acts{position:absolute;right:6px;top:6px;display:flex;flex-direction:column;gap:4px;}
+.card .acts button{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(255,255,255,.55);color:#1c1c1e;}
+.card .acts button:hover{background:rgba(255,255,255,.9);}
+.card .acts button.on{background:#34c759;color:#fff;}
+.card.rc{min-height:112px;}
+/* rutinas */
+.blk{border-radius:16px;padding:10px;margin:10px 0 14px;}
+.bh{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.dot{width:26px;height:26px;border-radius:50% !important;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);}
+.bn{flex:1;min-width:0;font-size:17px !important;font-weight:700;outline:none;padding:4px 2px !important;cursor:text !important;-webkit-user-select:text;user-select:text;}
+.bc{opacity:.55;font-size:13px;white-space:nowrap;}
+.addt{border:2px dashed var(--b) !important;border-radius:10px;min-height:84px;font-weight:600;opacity:.75;}
+.addt:hover{background:var(--h) !important;}
+.bnote{display:block;width:100%;margin-top:10px;min-height:56px;border-radius:10px;border:1px solid var(--b);background:var(--panel);color:inherit;padding:8px 10px;font:inherit;font-size:14px;resize:vertical;outline:none;-webkit-user-select:text;user-select:text;}
+.chip:disabled{opacity:.35;cursor:default;}
+/* elegir ejercicios */
+#pick{position:fixed;inset:0;z-index:900;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);}
+#pick.open{display:flex;}
+#pick .pk{background:var(--solid);width:100%;max-width:520px;max-height:86vh;border-radius:18px 18px 0 0;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 8px 30px rgba(0,0,0,.3);}
+@media (min-width:600px){#pick{align-items:center;}#pick .pk{border-radius:18px;}}
+.pkh{display:flex;align-items:center;gap:8px;padding:14px 14px 8px;font-weight:700;}
+.pkh span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pkh button{padding:8px 16px !important;border-radius:10px;background:var(--sel) !important;color:#fff !important;font-weight:600;}
+.pks{padding:0 14px 6px;}
+.pks input{width:100%;height:38px;border-radius:10px;border:1px solid var(--b) !important;padding:0 10px !important;font-size:16px;outline:none;cursor:text !important;-webkit-user-select:text;user-select:text;}
+.pkl{overflow:auto;-webkit-overflow-scrolling:touch;padding:0 8px calc(14px + env(safe-area-inset-bottom,0px));}
+.pkt{font-size:13px;font-weight:700;opacity:.55;margin:12px 8px 4px;}
+.prow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 8px !important;border-radius:10px;}
+.prow:hover{background:var(--h);}
+.prow .pd{width:14px;height:14px;border-radius:4px;flex-shrink:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
+.prow .pn{flex:1;min-width:0;}
+.prow .pn small{display:block;opacity:.55;font-size:12px;}
+.prow .pi{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:var(--h);font-weight:700;flex-shrink:0;}
+.prow.in .pi{background:#34c759;color:#fff;}
 .card.done{box-shadow:0 0 0 2px #34c759;}
 .empty{opacity:.55;padding:40px 10px;text-align:center;}
 @media (max-width:560px){.grid{grid-template-columns:1fr;}.fh{font-size:22px;}.row .rs{max-width:38vw;overflow:hidden;text-overflow:ellipsis;}}
@@ -152,12 +183,13 @@ svg{display:block;}
     <div class="bar search"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:8px;opacity:.6;flex-shrink:0"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input type="search" id="q" placeholder="buscar…" autocomplete="off" spellcheck="false"></div>
     <div class="bar"><button class="bt" data-v="menu" title="Más" aria-label="Más opciones"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg></button></div>
   </div>
-  <div class="tabs"><button class="tab" data-tab="t">Técnica</button><button class="tab" data-tab="c">Conceptos</button></div>
+  <div class="tabs"><button class="tab" data-tab="t">Técnica</button><button class="tab" data-tab="c">Conceptos</button><button class="tab" data-tab="r">Rutinas</button></div>
   <div class="body" id="body"></div>
 </div>
 <div class="menu" id="menu"></div>
 <button class="notebtn" id="notebtn" title="Estructura de entrenamiento" aria-label="Estructura de entrenamiento"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4v-4h4v-4h4V8h4"/><path d="M4 20V4"/></svg></button>
 <div class="lad" id="lad"></div>
+<div id="pick"></div>
 <div class="toast" id="toast"></div>
 <input type="file" id="imp" accept=".json,application/json" style="display:none">
 
@@ -502,6 +534,28 @@ const TRAINING = [
   ]],
 ];
 
+// ── EJERCICIOS (para las rutinas) ──
+// [nombre, nivel, minutos, cómo se hace, técnicas que trabaja]
+const DRILLS = [
+  ["Saltos alternos",1,2,"Parado: full hop, short hop, full hop, short hop… sin parar. Luego lo mismo corriendo. Si el short hop te sale alto, suelta el botón antes.",["Full hop","Short hop"]],
+  ["Saltos + fast fall",1,2,"Alterna short hop + fast fall y full hop + fast fall. Stick abajo justo al empezar a caer: tiene que bajar de golpe.",["Short hop","Full hop","Fast fall"]],
+  ["Dash dance y frenar",1,3,"Dash dance 10 s, pausa, repite. Después: dash → correr → agacharte para frenar → dash al otro lado.",["Dash dance","Run cancel"]],
+  ["Aéreos con C-stick",1,2,"Short hop + nair con el C-stick. Luego fair hacia delante y bair hacia atrás. El stick izquierdo solo para moverte.",["Short hop","C-stick aerials"]],
+  ["L-cancel con nair y fair",2,3,"Short hop + aéreo y L justo antes de tocar suelo. Empieza con nair; cuando salga, alterna con fair. El Training Mode te marca si aciertas.",["L-cancel"]],
+  ["SHFFL adelante y atrás",2,3,"Todo junto: short hop → aéreo → fast fall → L. Hacia delante, hacia atrás y en el sitio. Lento y limpio antes que rápido.",["SHFFL"]],
+  ["Wavedash ida y vuelta",2,3,"Wavedash a un lado y al otro. Después wavedash back mirando siempre al mismo lado. Prueba ángulos: más horizontal, más lejos.",["Wavedash","Wavedash back","Wavedash angle"]],
+  ["Cadena de movimiento",2,3,"Sin parar: dash dance → wavedash → dash dance → SHFFL → otra vez. Cambia el orden en cada ronda.",["Dash dance","Wavedash","SHFFL"]],
+  ["Escudo y salida",1,3,"Con una CPU atacando: escudo → agarre, y escudo → salto → nair, alternando. Al final, spot dodge y roll.",["Shield","Shield grab","Aerial out of shield","Spot dodge","Roll"]],
+  ["Tech alterno",1,3,"Deja que te tiren al suelo y tecnea: en el sitio, izquierda, derecha, alternando. Cuando falles, practica las levantadas.",["Tech in place","Tech roll","Neutral getup","Getup roll"]],
+  ["Opciones de borde",1,2,"Desde el borde, alterna: subir de pie, rodando, saltando y atacando. Luego: soltarte → doble salto → aéreo al escenario.",["Ledge getup","Ledge roll","Ledge jump","Ledge attack","Ledge hop"]],
+  ["Volver al escenario",1,3,"Sal fuera (o que te saquen): DI hacia dentro, doble salto y up-B agarrando el borde. Alterna volver alto y al borde.",["Survival DI","Up-B recovery","Ledge sweetspot"]],
+  ["Bajar y subir plataformas",2,2,"En Battlefield: atravesar plataformas hacia abajo, waveland para subir y bajar, alternando lados.",["Platform drop","Waveland on platform"]],
+];
+const ROUTINES_SEED = {
+  p1: { name: "Principiante A · Movimiento", color: "#2979ff", items: ["Saltos alternos","Saltos + fast fall","Dash dance y frenar","Aéreos con C-stick","L-cancel con nair y fair","SHFFL adelante y atrás","Wavedash ida y vuelta","Cadena de movimiento"], note: "Unos 20 min. Alterna con la B en días distintos.", o: 0 },
+  p2: { name: "Principiante B · Defensa y borde", color: "#ff5722", items: ["Saltos alternos","Escudo y salida","Tech alterno","Opciones de borde","Volver al escenario","Bajar y subir plataformas"], note: "Unos 15 min. Los saltos de calentamiento, y luego todo con una CPU en el Training Mode.", o: 1 },
+};
+
 </script>
 <script>
 /* ================= GUÍA ================= */
@@ -520,6 +574,22 @@ const isDark = c=>{ const m = /^#?([0-9a-f]{6})$/i.exec(c); if(!m) return false;
 const ALL = [];
 DATA.forEach((f, fi)=>{ f.color = COLORS[fi % COLORS.length]; f.subs.forEach(s=> s.items.forEach(a=>{ ALL.push({ n: a[0], l: a[1], t: a[2], d: a[3], h: a[4], f, s }); })); });
 const famItems = f=> ALL.filter(x=> x.f === f);
+const DR = DRILLS.map(a=> ({ n: a[0], l: a[1], t: 'r', m: a[2], d: a[3], h: '', techs: a[4], f: null }));
+const BYN = new Map(); ALL.concat(DR).forEach(x=> BYN.set(x.n, x));
+const RCOL = ['#2979ff','#ff5722','#2ecc40','#aa00ff','#ffb300','#00b8d4','#e91e63','#6d4c41','#546e7a'];
+
+/* --- rutinas: { id: { name, color, items:[nombres], note, o } } --- */
+const RK = 'ml_routines';
+const normR = r=> ({ name: String(r && r.name || ''), color: String(r && r.color || '#bdbdbd'), items: Array.isArray(r && r.items) ? r.items.map(String) : [], note: String(r && r.note || ''), o: +(r && r.o) || 0 });
+let routines = null; try{ routines = JSON.parse(localStorage.getItem(RK) || 'null'); }catch(e){}
+if(!routines || typeof routines !== 'object' || Array.isArray(routines)){ routines = {}; Object.entries(ROUTINES_SEED).forEach(([id, r])=> routines[id] = normR(r)); try{ localStorage.setItem(RK, JSON.stringify(routines)); }catch(e){} }
+else Object.keys(routines).forEach(id=> routines[id] = normR(routines[id]));
+const rlist = ()=> Object.entries(routines).sort((a, b)=> a[1].o - b[1].o);
+function saveR(){ try{ localStorage.setItem(RK, JSON.stringify(routines)); }catch(e){} window.mlDirty && window.mlDirty(); }
+const undoSt = [];
+function snapR(){ undoSt.push(JSON.stringify(routines)); if(undoSt.length > 30) undoSt.shift(); }
+const rName = r=> r.name || 'Rutina sin nombre';
+function newRoutine(name){ const id = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), rl = rlist(); routines[id] = normR({ name, color: RCOL[rl.length % RCOL.length], items: [], note: '', o: rl.length ? rl[rl.length - 1][1].o + 1 : 0 }); return id; }
 
 /* --- conseguidos: { nombre: fecha ISO } --- */
 const CK = 'ml_checks';
@@ -541,8 +611,9 @@ function fallback(n){ try{ const t = document.createElement('textarea'); t.value
 
 /* --- navegación --- */
 const body = $('#body'), qIn = $('#q');
-const TABN = { t: 'Técnica', c: 'Conceptos' }, ALLN = { t: 'Todas las técnicas', c: 'Todos los conceptos' };
-let tab0 = 't'; try{ if(localStorage.getItem('ml_tab') === 'c') tab0 = 'c'; }catch(e){}
+const TABN = { t: 'Técnica', c: 'Conceptos', r: 'Rutinas' }, ALLN = { t: 'Todas las técnicas', c: 'Todos los conceptos' };
+let tab0 = 't'; try{ const v = localStorage.getItem('ml_tab'); if(v === 'c' || v === 'r') tab0 = v; }catch(e){}
+let rview = 'rut';
 let stack = [{ t: 'root', ty: tab0 }], pos = 0, q = '', filt = { l: null, pend: false };
 const cur = ()=> stack[pos];
 const ty = ()=> cur().ty;
@@ -562,7 +633,7 @@ function crumb(){
 function render(anim){
   crumb(); body.scrollTop = 0;
   const s = cur();
-  if(s.t === 'root') renderRoot(); else if(s.t === 'fam') renderFam(DATA.find(f=> f.id === s.id)); else if(s.t === 'all') renderAll(); else renderSearch();
+  if(s.t === 'root') (s.ty === 'r' ? renderRut() : renderRoot()); else if(s.t === 'fam') renderFam(DATA.find(f=> f.id === s.id)); else if(s.t === 'all') renderAll(); else renderSearch();
   if(anim && body.firstElementChild) body.firstElementChild.classList.add('in');
 }
 function rerender(){ const y = body.scrollTop; render(false); body.scrollTop = y; }
@@ -583,10 +654,77 @@ const passes = x=> (!filt.l || x.l === filt.l) && (!filt.pend || !isDone(x.n));
 function chipsHTML(){
   return `<div class="chips">${[1,2,3,4].map(k=> `<button class="chip${filt.l === k ? ' on' : ''}" data-lv="${k}" style="${filt.l === k ? '' : 'box-shadow:inset 0 -3px 0 ' + NFILL[k]}">${NLAB[k]}</button>`).join('')}<span class="sep"></span><button class="chip${filt.pend ? ' on' : ''}" data-pend="1">Sin conseguir</button></div>`;
 }
-function card(x, showFam){
-  const d = isDone(x.n), how = x.h && x.h !== '—' ? x.h : '';
-  return `<div class="card${d ? ' done' : ''}" data-name="${esc(x.n)}" style="background:${NFILL[x.l]}"><b>${esc(x.n)}</b><span class="an">${esc(x.d)}</span><span class="sb">${esc(NLAB[x.l])}${how ? ' · ' + esc(how) : ''}${showFam ? ' · ' + esc(x.f.name) : ''}</span><button class="ck${d ? ' on' : ''}" data-ck="1" title="Marcar conseguido" aria-label="Marcar conseguido">✓</button></div>`;
+function card(x, showFam, ri){
+  const d = isDone(x.n), how = x.h && x.h !== '—' ? x.h : '', inR = ri != null;
+  const sb = x.t === 'r' ? `${NLAB[x.l]} · ${x.m} min · ${x.techs.join(', ')}` : `${NLAB[x.l]}${how ? ' · ' + how : ''}${showFam && x.f ? ' · ' + x.f.name : ''}`;
+  const acts = `<button class="${d ? 'on' : ''}" data-ck="1" title="Marcar conseguido" aria-label="Marcar conseguido">✓</button>` + (inR ? `<button data-rm="${ri}" title="Quitar de la rutina" aria-label="Quitar de la rutina">×</button>${ri > 0 ? `<button data-up="${ri}" title="Subir" aria-label="Subir">↑</button>` : ''}` : `<button data-add="1" title="Añadir a una rutina" aria-label="Añadir a una rutina">+</button>`);
+  return `<div class="card${d ? ' done' : ''}${inR ? ' rc' : ''}" data-name="${esc(x.n)}" style="background:${NFILL[x.l] || '#e5e5ea'}"><b>${esc(x.n)}</b><span class="an">${esc(x.d)}</span><span class="sb">${esc(sb)}</span><span class="acts">${acts}</span></div>`;
 }
+
+/* --- pestaña Rutinas --- */
+function renderRut(){
+  const rl = rlist();
+  let h = `<div class="page"><div class="chips" style="padding-top:6px"><button class="chip${rview === 'rut' ? ' on' : ''}" data-rv="rut">Rutinas · ${rl.length}</button><button class="chip${rview === 'ej' ? ' on' : ''}" data-rv="ej">Ejercicios · ${DR.length}</button><button class="chip" data-undo="1" style="margin-left:auto"${undoSt.length ? '' : ' disabled'}>↶ Deshacer</button></div>`;
+  if(rview === 'ej'){
+    const its = DR.filter(passes);
+    h += `<div class="fd" style="padding-top:6px">Ejercicios preparados que combinan varias técnicas. Toca + para añadirlos a una rutina.</div>${chipsHTML()}`;
+    h += its.length ? `<div class="grid">${its.map(x=> card(x)).join('')}</div>` : `<div class="empty">Nada con estos filtros.</div>`;
+  } else {
+    if(!rl.length) h += `<div class="empty">No hay rutinas. Crea una abajo.</div>`;
+    rl.forEach(([id, r])=>{
+      const mins = r.items.reduce((a, n)=> a + ((BYN.get(n) || {}).m || 0), 0);
+      h += `<div class="blk" data-rid="${id}" style="background:${r.color}29;border:1px solid ${r.color}8c">
+        <div class="bh"><button class="dot" data-rcol="1" style="background:${r.color}" title="Cambiar color" aria-label="Cambiar color"></button><input class="bn" data-rname="1" value="${esc(r.name)}" placeholder="nombre de la rutina…" autocomplete="off" spellcheck="false"><span class="bc">${r.items.length}${mins ? ' · ' + mins + ' min' : ''}</span><button class="chip" data-rdel="1" title="Borrar rutina" aria-label="Borrar rutina">×</button></div>
+        <div class="grid">${r.items.map((n, i)=> card(BYN.get(n) || { n, l: 0, t: 'x', d: 'ya no está en la guía', h: '' }, false, i)).join('')}<button class="addt" data-radd="1">+ añadir</button></div>
+        <textarea class="bnote" data-rnote="1" placeholder="notas, objetivos, referencias…">${esc(r.note)}</textarea></div>`;
+    });
+    h += `<button class="chip" data-rnew="1" style="margin:12px 0;padding:10px 16px !important;font-weight:700">+ nueva rutina</button>`;
+  }
+  body.innerHTML = h + '</div>';
+}
+function addTo(id, n){
+  const r = routines[id]; if(!r) return;
+  if(r.items.includes(n)){ toast('Ya está en ' + rName(r)); return; }
+  snapR(); r.items.push(n); saveR(); toast('Añadido a ' + rName(r));
+  if(ty() === 'r') rerender();
+}
+function addFlow(n, btn){
+  const rl = rlist();
+  if(!rl.length){ snapR(); const id = newRoutine('Mi rutina'); routines[id].items.push(n); saveR(); toast('Añadido a Mi rutina'); return; }
+  if(rl.length === 1){ addTo(rl[0][0], n); return; }
+  menu.innerHTML = `<div style="padding:8px 14px 4px;font-size:13px;opacity:.55">Añadir a…</div>` + rl.map(([id, r])=> `<button data-addto="${id}" data-addn="${esc(n)}"><span style="display:inline-block;width:12px;height:12px;border-radius:4px;background:${r.color};margin-right:10px;vertical-align:-1px"></span>${esc(rName(r))}${r.items.includes(n) ? ' ✓' : ''}</button>`).join('');
+  const b = btn.getBoundingClientRect(); menu.classList.add('open');
+  const w = menu.offsetWidth, hh = menu.offsetHeight;
+  menu.style.left = Math.max(8, Math.min(innerWidth - w - 8, b.right - w)) + 'px';
+  menu.style.top = Math.max(8, b.bottom + 6 + hh > innerHeight ? b.top - hh - 6 : b.bottom + 6) + 'px';
+}
+
+/* --- elegir ejercicios para una rutina --- */
+const pick = $('#pick'); let pickId = null, pickQ = '';
+function openPick(id){
+  pickId = id; pickQ = '';
+  pick.innerHTML = `<div class="pk" role="dialog"><div class="pkh"><span></span><button data-pkx="1">Listo</button></div><div class="pks"><input type="search" id="pkq" placeholder="buscar…" autocomplete="off" spellcheck="false"></div><div class="pkl" id="pkl"></div></div>`;
+  pick.classList.add('open'); drawPick();
+}
+function drawPick(){
+  const r = routines[pickId]; if(!r){ closePick(); return; }
+  $('.pkh span', pick).textContent = 'Añadir a «' + rName(r) + '»';
+  const qq = norm(pickQ.trim()), hit = x=> !qq || norm(x.n).includes(qq) || norm(x.d).includes(qq);
+  const row = x=> { const inn = r.items.includes(x.n); return `<button class="prow${inn ? ' in' : ''}" data-pn="${esc(x.n)}"><span class="pd" style="background:${NFILL[x.l]}"></span><span class="pn">${esc(x.n)}<small>${esc(x.t === 'r' ? x.m + ' min · ' + x.techs.join(', ') : x.f.name)}</small></span><span class="pi">${inn ? '✓' : '+'}</span></button>`; };
+  const sec = (title, its)=> its.length ? `<div class="pkt">${title}</div>` + its.map(row).join('') : '';
+  const h = sec('Ejercicios', DR.filter(hit)) + sec('Técnica', ALL.filter(x=> x.t === 't' && hit(x))) + sec('Conceptos', ALL.filter(x=> x.t === 'c' && hit(x)));
+  $('#pkl').innerHTML = h || `<div class="empty">Nada con «${esc(pickQ)}».</div>`;
+}
+function closePick(){ if(!pick.classList.contains('open')) return; pick.classList.remove('open'); pick.innerHTML = ''; pickId = null; if(ty() === 'r') rerender(); }
+pick.addEventListener('click', e=>{
+  if(e.target === pick || e.target.closest('[data-pkx]')){ closePick(); return; }
+  const p = e.target.closest('[data-pn]'); if(!p) return;
+  const r = routines[pickId], n = p.dataset.pn; if(!r) return;
+  snapR(); const i = r.items.indexOf(n);
+  if(i >= 0){ r.items.splice(i, 1); toast('Quitado'); } else { r.items.push(n); toast('Añadido'); }
+  saveR(); const y = $('#pkl').scrollTop; drawPick(); $('#pkl').scrollTop = y;
+});
+pick.addEventListener('input', e=>{ if(e.target.id === 'pkq'){ pickQ = e.target.value; drawPick(); } });
 
 /* --- una familia (solo lo de la pestaña actual) --- */
 function renderFam(f){
@@ -610,16 +748,17 @@ function renderAll(){
 
 /* --- búsqueda (en la pestaña actual) --- */
 function renderSearch(){
-  const k = ty(), qq = norm(q.trim()), hit = x=> !qq || norm(x.n).includes(qq) || norm(x.d).includes(qq) || norm(x.h).includes(qq);
+  const k = ty(), qq = norm(q.trim()), hit = x=> !qq || norm(x.n).includes(qq) || norm(x.d).includes(qq) || norm(x.h).includes(qq) || (x.techs && norm(x.techs.join(' ')).includes(qq));
   let h = `<div class="page" style="padding-top:8px">${chipsHTML()}`, shown = 0;
-  DATA.forEach(f=>{
+  if(k === 'r'){ const its = DR.filter(x=> passes(x) && hit(x)); shown = its.length; if(shown) h += `<div class="sf">Ejercicios<small>${shown}</small></div><div class="grid">${its.map(x=> card(x)).join('')}</div>`; }
+  else DATA.forEach(f=>{
     const its = ofType(f, k).filter(x=> passes(x) && hit(x));
     if(!its.length) return; shown += its.length;
     h += `<div class="sf"><a data-fam="${f.id}" style="background:${f.color};color:${isDark(f.color) ? '#fff' : '#1c1c1e'}">${esc(f.name)}</a><small>${its.length}</small></div><div class="grid">${its.map(x=> card(x)).join('')}</div>`;
   });
   if(!shown) h += `<div class="empty">Nada con «${esc(q)}» en ${esc(TABN[k])}.</div>`;
-  const o = k === 't' ? 'c' : 't', other = ALL.filter(x=> x.t === o && passes(x) && hit(x)).length;
-  if(other) h += `<div class="chips" style="padding-top:16px"><button class="chip" data-swap="${o}">${other} más en ${esc(TABN[o])} →</button></div>`;
+  const others = ['t', 'c', 'r'].filter(o=> o !== k).map(o=> [o, (o === 'r' ? DR : ALL.filter(x=> x.t === o)).filter(x=> passes(x) && hit(x)).length]).filter(a=> a[1]);
+  if(others.length) h += `<div class="chips" style="padding-top:16px">${others.map(([o, n])=> `<button class="chip" data-swap="${o}">${n} más en ${esc(TABN[o])} →</button>`).join('')}</div>`;
   body.innerHTML = h + '</div>';
 }
 
@@ -651,7 +790,7 @@ function menuAct(a){
   closeMenu();
   if(a === 'theme'){ const d = !document.documentElement.classList.contains('dark'); document.documentElement.classList.toggle('dark', d); try{ localStorage.setItem('ml_theme', d ? 'dark' : 'light'); }catch(e){} }
   if(a === 'export'){
-    const blob = new Blob([JSON.stringify({ format: 'melee-datos', version: 1, updated: new Date().toISOString(), checks }, null, 1)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify({ format: 'melee-datos', version: 2, updated: new Date().toISOString(), checks, routines }, null, 1)], { type: 'application/json' });
     const u = URL.createObjectURL(blob), l = document.createElement('a'); l.href = u; l.download = 'melee-datos-' + new Date().toISOString().slice(0, 10) + '.json'; document.body.appendChild(l); l.click(); l.remove(); setTimeout(()=> URL.revokeObjectURL(u), 2000);
     toast('Copia guardada');
   }
@@ -665,8 +804,9 @@ $('#imp').addEventListener('change', e=>{
     try{
       const o = JSON.parse(r.result);
       if(!o || o.format !== 'melee-datos' || typeof o.checks !== 'object' || Array.isArray(o.checks)) throw 0;
-      if(!confirm('¿Juntar esta copia con lo que ya tienes marcado?\n\nNo se borra nada: solo se añaden los conseguidos de la copia.')) return;
+      if(!confirm('¿Juntar esta copia con lo que ya tienes?\n\nNo se borra nada: se añaden los conseguidos y las rutinas de la copia que no tengas.')) return;
       Object.entries(o.checks).forEach(([n, t])=>{ if(!isDone(n)) checks[n] = t || new Date().toISOString(); });
+      if(o.routines && typeof o.routines === 'object' && !Array.isArray(o.routines)){ snapR(); Object.entries(o.routines).forEach(([id, r])=>{ if(!routines[id]) routines[id] = normR(r); }); saveR(); }
       saveChecks(); rerender(); toast('Copia cargada');
     }catch(err){ toast('Ese archivo no es una copia de MELEE'); }
   };
@@ -679,6 +819,7 @@ document.addEventListener('click', e=>{
   if(t.closest('[data-ladx]')){ closeLad(); return; }
   if(t.closest('#notebtn')){ lad.classList.contains('open') ? closeLad() : openLad(); return; }
   const mi = t.closest('[data-mi]'); if(mi){ menuAct(mi.dataset.mi); return; }
+  const at = t.closest('[data-addto]'); if(at){ closeMenu(); addTo(at.dataset.addto, at.dataset.addn); return; }
   if(!t.closest('#menu') && !t.closest('[data-v=menu]')) closeMenu();
   if(!t.closest('#app')) return;
   const v = t.closest('[data-v]'); if(v){ const a = v.dataset.v; if(a === 'back') back(); if(a === 'fwd') fwd(); if(a === 'home'){ q = ''; qIn.value = ''; if(cur().t !== 'root') go({ t: 'root', ty: ty() }); } if(a === 'menu') openMenu(v); return; }
@@ -688,10 +829,25 @@ document.addEventListener('click', e=>{
   const tb = t.closest('[data-tab]'); if(tb){ if(cur().t === 'search'){ stack[pos].ty = tb.dataset.tab; render(true); } else if(!(cur().t === 'root' && ty() === tb.dataset.tab)) go({ t: 'root', ty: tb.dataset.tab }); return; }
   const sw = t.closest('[data-swap]'); if(sw){ stack[pos].ty = sw.dataset.swap; render(true); return; }
   if(t.closest('[data-pend]')){ filt.pend = !filt.pend; rerender(); return; }
+  const rv = t.closest('[data-rv]'); if(rv){ rview = rv.dataset.rv; render(true); return; }
+  if(t.closest('[data-undo]')){ if(undoSt.length){ routines = JSON.parse(undoSt.pop()); saveR(); rerender(); toast('Deshecho'); } return; }
+  if(t.closest('[data-rnew]')){ snapR(); const id = newRoutine(''); saveR(); rerender(); const inp = $(`[data-rid="${id}"] [data-rname]`); if(inp){ inp.scrollIntoView({ block: 'center' }); inp.focus(); } return; }
+  const blk = t.closest('[data-rid]'), rid = blk && blk.dataset.rid, R = rid && routines[rid];
+  if(R && t.closest('[data-rdel]')){ if(!confirm('¿Borrar la rutina «' + rName(R) + '»?')) return; snapR(); delete routines[rid]; saveR(); rerender(); toast('Rutina borrada · ↶ para deshacer'); return; }
+  if(R && t.closest('[data-rcol]')){ snapR(); R.color = RCOL[(RCOL.indexOf(R.color) + 1) % RCOL.length]; saveR(); rerender(); return; }
+  if(R && t.closest('[data-radd]')){ openPick(rid); return; }
   const c = t.closest('.card'); if(!c) return;
   const n = c.dataset.name;
-  if(t.closest('[data-ck]')){ const on = toggle(n); if(filt.pend && on){ rerender(); } else { c.classList.toggle('done', on); t.closest('[data-ck]').classList.toggle('on', on); } toast(on ? 'Conseguido' : 'Desmarcado'); return; }
+  if(R && t.closest('[data-rm]')){ snapR(); R.items.splice(+t.closest('[data-rm]').dataset.rm, 1); saveR(); rerender(); return; }
+  if(R && t.closest('[data-up]')){ const i = +t.closest('[data-up]').dataset.up; snapR(); [R.items[i - 1], R.items[i]] = [R.items[i], R.items[i - 1]]; saveR(); rerender(); return; }
+  if(t.closest('[data-add]')){ addFlow(n, t.closest('[data-add]')); return; }
+  if(t.closest('[data-ck]')){ const on = toggle(n); if(filt.pend && on || R){ rerender(); } else { c.classList.toggle('done', on); t.closest('[data-ck]').classList.toggle('on', on); } toast(on ? 'Conseguido' : 'Desmarcado'); return; }
   copy(n);
+});
+document.addEventListener('input', e=>{
+  const b = e.target.closest && e.target.closest('[data-rid]'); if(!b || !routines[b.dataset.rid]) return;
+  if(e.target.matches('[data-rname]')){ routines[b.dataset.rid].name = e.target.value; saveR(); }
+  if(e.target.matches('[data-rnote]')){ routines[b.dataset.rid].note = e.target.value; saveR(); }
 });
 qIn.addEventListener('input', e=>{
   q = e.target.value;
@@ -699,15 +855,24 @@ qIn.addEventListener('input', e=>{
   if(cur().t === 'search') render(false); else go({ t: 'search' });
 });
 document.addEventListener('keydown', e=>{
+  if(e.key === 'Enter' && e.target.matches && e.target.matches('[data-rname]')){ e.target.blur(); return; }
   if(e.key !== 'Escape') return;
   if(document.getElementById('ml-gh').classList.contains('open')) return;
+  if(pick.classList.contains('open')){ closePick(); return; }
   if(menu.classList.contains('open')){ closeMenu(); return; }
   if(lad.classList.contains('open')){ closeLad(); return; }
+  if(e.target.matches('[data-rname],[data-rnote]')){ e.target.blur(); return; }
   if(e.target.matches('input')){ if(q){ q = ''; qIn.value = ''; if(cur().t === 'search') back(); } qIn.blur(); return; }
   back();
 });
-window.mlApply = function(m){ checks = m; try{ localStorage.setItem(CK, JSON.stringify(checks)); }catch(e){} rerender(); };
-window.mlChecks = ()=> checks;
+window.mlApply = function(m){
+  checks = m.c || {}; routines = {}; Object.entries(m.r || {}).forEach(([id, r])=> routines[id] = normR(r));
+  try{ localStorage.setItem(CK, JSON.stringify(checks)); localStorage.setItem(RK, JSON.stringify(routines)); }catch(e){}
+  const a = document.activeElement; if(a && a.matches && a.matches('[data-rname],[data-rnote],#pkq')) return;
+  if(pick.classList.contains('open')) drawPick(); rerender();
+};
+window.mlData = ()=> ({ c: checks, r: routines });
+window.mlNormR = normR;
 
 render(true);
 const bh = document.getElementById('boot-hide');
@@ -716,7 +881,7 @@ if(bh) requestAnimationFrame(()=> requestAnimationFrame(()=> bh.remove()));
 </script>
 <script>
 /* ================= GUARDADO EN GITHUB =================
-   Los conseguidos viven en melee-datos.json dentro de tu repositorio.
+   Los conseguidos y las rutinas viven en melee-datos.json dentro de tu repositorio.
    Al marcar algo se sube a los pocos segundos; al abrir la app se baja lo último. Si dos aparatos cambian a la vez, se juntan. */
 (function(){
 "use strict";
@@ -773,7 +938,10 @@ function guessFromUrl(){
 }
 function loadBase(){ try{ return JSON.parse(localStorage.getItem(BASEK) || 'null'); }catch(e){ return null; } }
 function saveBase(o){ try{ localStorage.setItem(BASEK, S(o)); }catch(e){} }
-const snap = ()=>{ const c = window.mlChecks ? window.mlChecks() : {}; const o = {}; Object.keys(c).sort().forEach(k=> o[k] = c[k] || ''); return o; };
+const sortMap = m=>{ const o = {}; Object.keys(m || {}).sort().forEach(k=> o[k] = m[k]); return o; };
+const nrMap = m=>{ const o = {}; Object.keys(m || {}).sort().forEach(k=> o[k] = window.mlNormR(m[k])); return o; };
+const ckMap = m=>{ const o = {}; Object.keys(m || {}).sort().forEach(k=> o[k] = m[k] || ''); return o; };
+const snap = ()=>{ const d = window.mlData(); return { c: ckMap(d.c), r: nrMap(d.r) }; };
 const valid = o=> !!o && o.format === 'melee-datos' && o.checks && typeof o.checks === 'object' && !Array.isArray(o.checks);
 
 /* ---------- fusión a tres bandas: lo último común (b), lo de aquí (l) y lo de GitHub (r) ---------- */
@@ -809,15 +977,16 @@ async function sync(){
         if(!txt){ const rr = await ghApi('/contents/' + path + '?ref=' + encodeURIComponent(gh.branch), { raw: true }); txt = await rr.text(); }
         let o = null; try{ o = JSON.parse(txt); }catch(e){}
         if(!valid(o)) throw new Error('el archivo ' + FILE + ' de GitHub no es de MELEE');
-        remote = o.checks;
+        remote = { c: ckMap(o.checks), r: nrMap(o.routines && typeof o.routines === 'object' && !Array.isArray(o.routines) ? o.routines : {}) };
       }
-      const base = loadBase(), local = snap();
+      let base = loadBase(); if(base && !(base.c && typeof base.c === 'object' && 'r' in base)) base = { c: base, r: null };
+      const local = snap();
       let merged;
-      if(remote && firstMode === 'replace') merged = mapMerge(null, {}, remote);
-      else if(remote) merged = mapMerge(base, local, remote);
+      if(remote && firstMode === 'replace') merged = remote;
+      else if(remote) merged = { c: mapMerge(base && base.c, local.c, remote.c), r: mapMerge(base && base.r, local.r, remote.r) };
       else merged = local;
-      if(!remote || S(merged) !== S(mapMerge(null, {}, remote))){
-        const body = { message: 'MELEE: ' + new Date().toLocaleString('es-ES'), content: b64enc(S({ format: 'melee-datos', version: 1, updated: new Date().toISOString(), checks: merged }, null, 1)), branch: gh.branch };
+      if(!remote || S(merged) !== S(remote)){
+        const body = { message: 'MELEE: ' + new Date().toLocaleString('es-ES'), content: b64enc(S({ format: 'melee-datos', version: 2, updated: new Date().toISOString(), checks: merged.c, routines: merged.r }, null, 1)), branch: gh.branch };
         if(sha) body.sha = sha;
         const p = await ghApi('/contents/' + path, { method: 'PUT', body });
         if(p.status === 409 || p.status === 422) continue;
