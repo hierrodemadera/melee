@@ -97,6 +97,17 @@ svg{display:block;}
 .addt:hover{background:var(--h) !important;}
 .bnote{display:block;width:100%;margin-top:10px;min-height:56px;border-radius:10px;border:1px solid var(--b);background:var(--panel);color:inherit;padding:8px 10px;font:inherit;font-size:14px;resize:vertical;outline:none;-webkit-user-select:text;user-select:text;}
 .chip:disabled{opacity:.35;cursor:default;}
+.rcount{opacity:.55;font-size:14px;align-self:center;padding-left:4px;}
+.blk input,.blk textarea{cursor:text !important;-webkit-user-select:text;user-select:text;}
+.rh1{display:flex;align-items:center;gap:6px;margin:16px 0 6px;padding-bottom:4px;border-bottom:2px solid var(--b);}
+.rt1{flex:1;min-width:0;font-size:19px !important;font-weight:800;outline:none;padding:2px !important;}
+.rh2{margin:10px 0 6px;padding:8px 10px;border-radius:12px;background:var(--panel);box-shadow:0 0 0 .5px var(--b);}
+.rh2a{display:flex;align-items:center;gap:6px;}
+.rt2{flex:1;min-width:0;font-size:16px !important;font-weight:700;outline:none;padding:2px !important;}
+.rd2{display:block;width:100%;font:inherit;font-size:14px;line-height:1.35;opacity:.75;resize:none;overflow:hidden;background:transparent;border:0;outline:none;color:inherit;padding:2px;}
+.hacts{display:flex;gap:4px;flex-shrink:0;}
+.hacts button{width:28px;height:28px;border-radius:8px;background:var(--h);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.hacts button:hover{background:var(--b);}
 /* elegir ejercicios */
 #pick{position:fixed;inset:0;z-index:900;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);}
 #pick.open{display:flex;}
@@ -534,8 +545,7 @@ const TRAINING = [
   ]],
 ];
 
-// ── EJERCICIOS (para las rutinas) ──
-// [nombre, nivel, minutos, cómo se hace, técnicas que trabaja]
+// ── EJERCICIOS ANTIGUOS (solo para convertir rutinas de la versión anterior) ──
 const DRILLS = [
   ["Saltos alternos",1,2,"Parado: full hop, short hop, full hop, short hop… sin parar. Luego lo mismo corriendo. Si el short hop te sale alto, suelta el botón antes.",["Full hop","Short hop"]],
   ["Saltos + fast fall",1,2,"Alterna short hop + fast fall y full hop + fast fall. Stick abajo justo al empezar a caer: tiene que bajar de golpe.",["Short hop","Full hop","Fast fall"]],
@@ -551,10 +561,56 @@ const DRILLS = [
   ["Volver al escenario",1,3,"Sal fuera (o que te saquen): DI hacia dentro, doble salto y up-B agarrando el borde. Alterna volver alto y al borde.",["Survival DI","Up-B recovery","Ledge sweetspot"]],
   ["Bajar y subir plataformas",2,2,"En Battlefield: atravesar plataformas hacia abajo, waveland para subir y bajar, alternando lados.",["Platform drop","Waveland on platform"]],
 ];
+// ── RUTINAS DE INICIO ──
+// En "items": un texto es una ficha de la guía; {h:1,t} es un título; {h:2,t,d} es un subtítulo (ejercicio) con su explicación.
+const H1 = t=> ({ h: 1, t }), H2 = (t, d)=> ({ h: 2, t, d });
 const ROUTINES_SEED = {
-  p1: { name: "Principiante A · Movimiento", color: "#2979ff", items: ["Saltos alternos","Saltos + fast fall","Dash dance y frenar","Aéreos con C-stick","L-cancel con nair y fair","SHFFL adelante y atrás","Wavedash ida y vuelta","Cadena de movimiento"], note: "Unos 20 min. Alterna con la B en días distintos.", o: 0 },
-  p2: { name: "Principiante B · Defensa y borde", color: "#ff5722", items: ["Saltos alternos","Escudo y salida","Tech alterno","Opciones de borde","Volver al escenario","Bajar y subir plataformas"], note: "Unos 15 min. Los saltos de calentamiento, y luego todo con una CPU en el Training Mode.", o: 1 },
+  p1: { name: "Principiante A · Movimiento", color: "#2979ff", note: "Unos 30 min. Alterna con la B en días distintos.", o: 0, items: [
+    H1("Calentamiento · 5 min"),
+    H2("Saltos alternos","Parado y luego corriendo: full hop, short hop, full hop… sin parar. Si el short hop te sale alto, suelta el botón antes."),
+    "Full hop","Short hop",
+    H2("Dash dance y frenar","Dash dance 10 s, pausa, repite. Luego: dash → correr → agacharte para frenar → dash al otro lado."),
+    "Dash dance","Run cancel",
+    H1("Laboratorio · 15 min"),
+    H2("Saltos + fast fall","Alterna short hop + fast fall y full hop + fast fall. Stick abajo justo al empezar a caer: tiene que bajar de golpe."),
+    "Short hop","Full hop","Fast fall",
+    H2("Aéreos con C-stick","Short hop + nair con el C-stick; luego fair hacia delante y bair hacia atrás. El stick izquierdo solo para moverte."),
+    "Short hop","C-stick aerials",
+    H2("L-cancel","Short hop + aéreo y L justo antes de tocar suelo. Primero con nair; cuando salga, con fair. El Training Mode te marca si aciertas."),
+    "L-cancel","Landing lag",
+    H2("SHFFL","Todo junto: short hop → aéreo → fast fall → L. Hacia delante, hacia atrás y en el sitio. Lento y limpio antes que rápido."),
+    "SHFFL",
+    H2("Wavedash ida y vuelta","A un lado y al otro. Después wavedash back mirando siempre al mismo lado. Prueba ángulos: más horizontal, más lejos."),
+    "Wavedash","Wavedash back","Wavedash angle",
+    H1("Contra un dummy · 5 min"),
+    H2("Cadena de movimiento","Con una CPU quieta: dash dance → wavedash → SHFFL sobre ella. Cambia el orden en cada ronda."),
+    "Dash dance","Wavedash","SHFFL",
+    H1("Partidas · 20 min"),
+    H2("Un objetivo","En unranked: hacer SHFFL en cada aéreo, aunque pierdas."),
+    "Unranked / Ranked / Direct",
+  ]},
+  p2: { name: "Principiante B · Defensa y borde", color: "#ff5722", note: "Unos 30 min. Laboratorio y dummy, con una CPU en el Training Mode.", o: 1, items: [
+    H1("Calentamiento · 5 min"),
+    H2("Saltos alternos","Parado y luego corriendo: full hop, short hop, full hop… sin parar."),
+    "Full hop","Short hop",
+    H1("Laboratorio · 10 min"),
+    H2("Opciones de borde","Desde el borde, alterna: subir de pie, rodando, saltando y atacando. Luego: soltarte → doble salto → aéreo al escenario."),
+    "Ledge getup","Ledge roll","Ledge jump","Ledge attack","Ledge drop","Ledge hop",
+    H2("Bajar y subir plataformas","En Battlefield: atravesar plataformas hacia abajo y waveland para subir y bajar, alternando lados."),
+    "Platform drop","Waveland on platform",
+    H1("Contra un dummy · 10 min"),
+    H2("Escudo y salida","Con la CPU atacando: escudo → agarre, y escudo → salto → nair, alternando. Al final, spot dodge y roll."),
+    "Shield","Shield grab","Aerial out of shield","Spot dodge","Roll",
+    H2("Tech alterno","Que te tiren al suelo: tech en el sitio, izquierda, derecha, alternando. Si fallas, levántate de las tres formas."),
+    "Tech in place","Tech roll","Neutral getup","Getup roll","Getup attack",
+    H2("Volver al escenario","Que te saquen fuera: DI hacia dentro, doble salto y up-B agarrando el borde. Alterna volver alto y al borde."),
+    "Survival DI","Up-B recovery","Ledge sweetspot",
+    H1("Partidas · 20 min"),
+    H2("Un objetivo","En unranked: tecnear siempre y variar cómo subes del borde."),
+    "Unranked / Ranked / Direct",
+  ]},
 };
+const ROUTINE_TEMPLATE = [H1("Calentamiento"), H1("Laboratorio"), H1("Contra un dummy"), H1("Partidas")];
 
 </script>
 <script>
@@ -575,21 +631,38 @@ const ALL = [];
 DATA.forEach((f, fi)=>{ f.color = COLORS[fi % COLORS.length]; f.subs.forEach(s=> s.items.forEach(a=>{ ALL.push({ n: a[0], l: a[1], t: a[2], d: a[3], h: a[4], f, s }); })); });
 const famItems = f=> ALL.filter(x=> x.f === f);
 const DR = DRILLS.map(a=> ({ n: a[0], l: a[1], t: 'r', m: a[2], d: a[3], h: '', techs: a[4], f: null }));
-const BYN = new Map(); ALL.concat(DR).forEach(x=> BYN.set(x.n, x));
+const BYN = new Map(); ALL.forEach(x=> BYN.set(x.n, x));
+const OLD = new Map(); DR.forEach(x=> OLD.set(x.n, x));
 const RCOL = ['#2979ff','#ff5722','#2ecc40','#aa00ff','#ffb300','#00b8d4','#e91e63','#6d4c41','#546e7a'];
 
 /* --- rutinas: { id: { name, color, items:[nombres], note, o } } --- */
 const RK = 'ml_routines';
-const normR = r=> ({ name: String(r && r.name || ''), color: String(r && r.color || '#bdbdbd'), items: Array.isArray(r && r.items) ? r.items.map(String) : [], note: String(r && r.note || ''), o: +(r && r.o) || 0 });
+const normItem = x=> typeof x === 'string' ? x : x && x.h === 1 ? { h: 1, t: String(x.t || '') } : x && x.h === 2 ? { h: 2, t: String(x.t || ''), d: String(x.d || '') } : null;
+const normR = r=> ({ name: String(r && r.name || ''), color: String(r && r.color || '#bdbdbd'), items: Array.isArray(r && r.items) ? r.items.map(normItem).filter(x=> x !== null) : [], note: String(r && r.note || ''), o: +(r && r.o) || 0 });
 let routines = null; try{ routines = JSON.parse(localStorage.getItem(RK) || 'null'); }catch(e){}
 if(!routines || typeof routines !== 'object' || Array.isArray(routines)){ routines = {}; Object.entries(ROUTINES_SEED).forEach(([id, r])=> routines[id] = normR(r)); try{ localStorage.setItem(RK, JSON.stringify(routines)); }catch(e){} }
 else Object.keys(routines).forEach(id=> routines[id] = normR(routines[id]));
+/* versión anterior: los ejercicios inventados pasan a ser subtítulos con sus fichas de la guía */
+function migrate(){
+  let ch = false;
+  Object.keys(routines).forEach(id=>{
+    const r = routines[id];
+    if(!r.items.some(x=> typeof x === 'string' && OLD.has(x))) return;
+    ch = true;
+    if(ROUTINES_SEED[id]){ routines[id] = normR(Object.assign({}, ROUTINES_SEED[id], { name: r.name, color: r.color, o: r.o })); return; }
+    const out = []; r.items.forEach(x=>{ if(typeof x === 'string' && OLD.has(x)){ const o = OLD.get(x); out.push({ h: 2, t: o.n, d: o.d }); o.techs.forEach(n=> out.push(n)); } else out.push(x); });
+    r.items = out;
+  });
+  if(ch) try{ localStorage.setItem(RK, JSON.stringify(routines)); }catch(e){}
+  return ch;
+}
+const migrated = migrate();
 const rlist = ()=> Object.entries(routines).sort((a, b)=> a[1].o - b[1].o);
 function saveR(){ try{ localStorage.setItem(RK, JSON.stringify(routines)); }catch(e){} window.mlDirty && window.mlDirty(); }
 const undoSt = [];
 function snapR(){ undoSt.push(JSON.stringify(routines)); if(undoSt.length > 30) undoSt.shift(); }
 const rName = r=> r.name || 'Rutina sin nombre';
-function newRoutine(name){ const id = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), rl = rlist(); routines[id] = normR({ name, color: RCOL[rl.length % RCOL.length], items: [], note: '', o: rl.length ? rl[rl.length - 1][1].o + 1 : 0 }); return id; }
+function newRoutine(name){ const id = 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), rl = rlist(); routines[id] = normR({ name, color: RCOL[rl.length % RCOL.length], items: ROUTINE_TEMPLATE, note: '', o: rl.length ? rl[rl.length - 1][1].o + 1 : 0 }); return id; }
 
 /* --- conseguidos: { nombre: fecha ISO } --- */
 const CK = 'ml_checks';
@@ -613,7 +686,7 @@ function fallback(n){ try{ const t = document.createElement('textarea'); t.value
 const body = $('#body'), qIn = $('#q');
 const TABN = { t: 'Técnica', c: 'Conceptos', r: 'Rutinas' }, ALLN = { t: 'Todas las técnicas', c: 'Todos los conceptos' };
 let tab0 = 't'; try{ const v = localStorage.getItem('ml_tab'); if(v === 'c' || v === 'r') tab0 = v; }catch(e){}
-let rview = 'rut';
+
 let stack = [{ t: 'root', ty: tab0 }], pos = 0, q = '', filt = { l: null, pend: false };
 const cur = ()=> stack[pos];
 const ty = ()=> cur().ty;
@@ -662,57 +735,70 @@ function card(x, showFam, ri){
 }
 
 /* --- pestaña Rutinas --- */
+const nCards = r=> r.items.filter(x=> typeof x === 'string').length;
+const HB = (i, first)=> `<span class="hacts"><button data-hadd="${i}" title="Añadir fichas aquí" aria-label="Añadir fichas aquí">+</button>${first ? '' : `<button data-up="${i}" title="Subir" aria-label="Subir">↑</button>`}<button data-rm="${i}" title="Quitar" aria-label="Quitar">×</button></span>`;
 function renderRut(){
   const rl = rlist();
-  let h = `<div class="page"><div class="chips" style="padding-top:6px"><button class="chip${rview === 'rut' ? ' on' : ''}" data-rv="rut">Rutinas · ${rl.length}</button><button class="chip${rview === 'ej' ? ' on' : ''}" data-rv="ej">Ejercicios · ${DR.length}</button><button class="chip" data-undo="1" style="margin-left:auto"${undoSt.length ? '' : ' disabled'}>↶ Deshacer</button></div>`;
-  if(rview === 'ej'){
-    const its = DR.filter(passes);
-    h += `<div class="fd" style="padding-top:6px">Ejercicios preparados que combinan varias técnicas. Toca + para añadirlos a una rutina.</div>${chipsHTML()}`;
-    h += its.length ? `<div class="grid">${its.map(x=> card(x)).join('')}</div>` : `<div class="empty">Nada con estos filtros.</div>`;
-  } else {
-    if(!rl.length) h += `<div class="empty">No hay rutinas. Crea una abajo.</div>`;
-    rl.forEach(([id, r])=>{
-      const mins = r.items.reduce((a, n)=> a + ((BYN.get(n) || {}).m || 0), 0);
-      h += `<div class="blk" data-rid="${id}" style="background:${r.color}29;border:1px solid ${r.color}8c">
-        <div class="bh"><button class="dot" data-rcol="1" style="background:${r.color}" title="Cambiar color" aria-label="Cambiar color"></button><input class="bn" data-rname="1" value="${esc(r.name)}" placeholder="nombre de la rutina…" autocomplete="off" spellcheck="false"><span class="bc">${r.items.length}${mins ? ' · ' + mins + ' min' : ''}</span><button class="chip" data-rdel="1" title="Borrar rutina" aria-label="Borrar rutina">×</button></div>
-        <div class="grid">${r.items.map((n, i)=> card(BYN.get(n) || { n, l: 0, t: 'x', d: 'ya no está en la guía', h: '' }, false, i)).join('')}<button class="addt" data-radd="1">+ añadir</button></div>
-        <textarea class="bnote" data-rnote="1" placeholder="notas, objetivos, referencias…">${esc(r.note)}</textarea></div>`;
+  let h = `<div class="page"><div class="chips" style="padding-top:6px"><span class="rcount">${rl.length} rutina${rl.length === 1 ? '' : 's'}</span><button class="chip" data-undo="1" style="margin-left:auto"${undoSt.length ? '' : ' disabled'}>↶ Deshacer</button></div>`;
+  if(!rl.length) h += `<div class="empty">No hay rutinas. Crea una abajo.</div>`;
+  rl.forEach(([id, r])=>{
+    let inner = '', grid = [];
+    const flush = ()=>{ if(grid.length){ inner += `<div class="grid">${grid.join('')}</div>`; grid = []; } };
+    r.items.forEach((x, i)=>{
+      if(typeof x === 'string'){ grid.push(card(BYN.get(x) || { n: x, l: 0, t: 'x', d: 'ya no está en la guía', h: '' }, false, i)); return; }
+      flush();
+      if(x.h === 1) inner += `<div class="rh1" data-ii="${i}"><input class="rt1" data-hed="t" value="${esc(x.t)}" placeholder="título…" autocomplete="off" spellcheck="false">${HB(i, i === 0)}</div>`;
+      else inner += `<div class="rh2" data-ii="${i}"><div class="rh2a"><input class="rt2" data-hed="t" value="${esc(x.t)}" placeholder="ejercicio…" autocomplete="off" spellcheck="false">${HB(i, i === 0)}</div><textarea class="rd2" data-hed="d" rows="1" placeholder="explicación del ejercicio…">${esc(x.d)}</textarea></div>`;
     });
-    h += `<button class="chip" data-rnew="1" style="margin:12px 0;padding:10px 16px !important;font-weight:700">+ nueva rutina</button>`;
-  }
+    flush();
+    h += `<div class="blk" data-rid="${id}" style="background:${r.color}29;border:1px solid ${r.color}8c">
+      <div class="bh"><button class="dot" data-rcol="1" style="background:${r.color}" title="Cambiar color" aria-label="Cambiar color"></button><input class="bn" data-rname="1" value="${esc(r.name)}" placeholder="nombre de la rutina…" autocomplete="off" spellcheck="false"><span class="bc">${nCards(r)}</span><button class="chip" data-rdel="1" title="Borrar rutina" aria-label="Borrar rutina">×</button></div>
+      ${inner}
+      <div class="chips" style="padding-top:10px"><button class="chip" data-radd="1">+ fichas</button><button class="chip" data-rh="1">+ título</button><button class="chip" data-rh="2">+ subtítulo</button></div>
+      <textarea class="bnote" data-rnote="1" placeholder="notas, objetivos, referencias…">${esc(r.note)}</textarea></div>`;
+  });
+  h += `<button class="chip" data-rnew="1" style="margin:12px 0;padding:10px 16px !important;font-weight:700">+ nueva rutina</button>`;
   body.innerHTML = h + '</div>';
+  body.querySelectorAll('.rd2').forEach(fit);
+}
+function fit(ta){ ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; }
+/* fin de la sección que empieza en el título/subtítulo i: antes del siguiente título del mismo nivel o superior */
+function sectionEnd(r, i){
+  const lv = r.items[i].h;
+  for(let j = i + 1; j < r.items.length; j++){ const x = r.items[j]; if(typeof x !== 'string' && x.h <= lv) return j; }
+  return r.items.length;
 }
 function addTo(id, n){
   const r = routines[id]; if(!r) return;
-  if(r.items.includes(n)){ toast('Ya está en ' + rName(r)); return; }
-  snapR(); r.items.push(n); saveR(); toast('Añadido a ' + rName(r));
+  snapR(); r.items.push(n); saveR(); toast('Añadido al final de ' + rName(r));
   if(ty() === 'r') rerender();
 }
 function addFlow(n, btn){
   const rl = rlist();
   if(!rl.length){ snapR(); const id = newRoutine('Mi rutina'); routines[id].items.push(n); saveR(); toast('Añadido a Mi rutina'); return; }
   if(rl.length === 1){ addTo(rl[0][0], n); return; }
-  menu.innerHTML = `<div style="padding:8px 14px 4px;font-size:13px;opacity:.55">Añadir a…</div>` + rl.map(([id, r])=> `<button data-addto="${id}" data-addn="${esc(n)}"><span style="display:inline-block;width:12px;height:12px;border-radius:4px;background:${r.color};margin-right:10px;vertical-align:-1px"></span>${esc(rName(r))}${r.items.includes(n) ? ' ✓' : ''}</button>`).join('');
+  menu.innerHTML = `<div style="padding:8px 14px 4px;font-size:13px;opacity:.55">Añadir al final de…</div>` + rl.map(([id, r])=> `<button data-addto="${id}" data-addn="${esc(n)}"><span style="display:inline-block;width:12px;height:12px;border-radius:4px;background:${r.color};margin-right:10px;vertical-align:-1px"></span>${esc(rName(r))}${r.items.includes(n) ? ' ✓' : ''}</button>`).join('');
   const b = btn.getBoundingClientRect(); menu.classList.add('open');
   const w = menu.offsetWidth, hh = menu.offsetHeight;
   menu.style.left = Math.max(8, Math.min(innerWidth - w - 8, b.right - w)) + 'px';
   menu.style.top = Math.max(8, b.bottom + 6 + hh > innerHeight ? b.top - hh - 6 : b.bottom + 6) + 'px';
 }
 
-/* --- elegir ejercicios para una rutina --- */
-const pick = $('#pick'); let pickId = null, pickQ = '';
-function openPick(id){
-  pickId = id; pickQ = '';
-  pick.innerHTML = `<div class="pk" role="dialog"><div class="pkh"><span></span><button data-pkx="1">Listo</button></div><div class="pks"><input type="search" id="pkq" placeholder="buscar…" autocomplete="off" spellcheck="false"></div><div class="pkl" id="pkl"></div></div>`;
+/* --- elegir fichas de la guía para una rutina --- */
+const pick = $('#pick'); let pickId = null, pickQ = '', pickAt = 0, pickWhere = '';
+function openPick(id, at, where){
+  pickId = id; pickQ = ''; pickAt = at; pickWhere = where || '';
+  pick.innerHTML = `<div class="pk" role="dialog"><div class="pkh"><span></span><button data-pkx="1">Listo</button></div><div class="pks"><input type="search" id="pkq" placeholder="buscar ficha…" autocomplete="off" spellcheck="false"></div><div class="pkl" id="pkl"></div></div>`;
   pick.classList.add('open'); drawPick();
 }
 function drawPick(){
   const r = routines[pickId]; if(!r){ closePick(); return; }
-  $('.pkh span', pick).textContent = 'Añadir a «' + rName(r) + '»';
+  $('.pkh span', pick).textContent = 'Añadir a ' + (pickWhere ? '«' + pickWhere + '»' : '«' + rName(r) + '»');
   const qq = norm(pickQ.trim()), hit = x=> !qq || norm(x.n).includes(qq) || norm(x.d).includes(qq);
-  const row = x=> { const inn = r.items.includes(x.n); return `<button class="prow${inn ? ' in' : ''}" data-pn="${esc(x.n)}"><span class="pd" style="background:${NFILL[x.l]}"></span><span class="pn">${esc(x.n)}<small>${esc(x.t === 'r' ? x.m + ' min · ' + x.techs.join(', ') : x.f.name)}</small></span><span class="pi">${inn ? '✓' : '+'}</span></button>`; };
+  const sec0 = r.items.slice(0, pickAt);
+  const row = x=> { const inn = sec0.lastIndexOf(x.n) > -1 && sec0.slice(sec0.lastIndexOf(x.n)).every(y=> typeof y === 'string'); return `<button class="prow${inn ? ' in' : ''}" data-pn="${esc(x.n)}"><span class="pd" style="background:${NFILL[x.l]}"></span><span class="pn">${esc(x.n)}<small>${esc(x.f.name)}</small></span><span class="pi">${inn ? '✓' : '+'}</span></button>`; };
   const sec = (title, its)=> its.length ? `<div class="pkt">${title}</div>` + its.map(row).join('') : '';
-  const h = sec('Ejercicios', DR.filter(hit)) + sec('Técnica', ALL.filter(x=> x.t === 't' && hit(x))) + sec('Conceptos', ALL.filter(x=> x.t === 'c' && hit(x)));
+  const h = sec('Técnica', ALL.filter(x=> x.t === 't' && hit(x))) + sec('Conceptos', ALL.filter(x=> x.t === 'c' && hit(x)));
   $('#pkl').innerHTML = h || `<div class="empty">Nada con «${esc(pickQ)}».</div>`;
 }
 function closePick(){ if(!pick.classList.contains('open')) return; pick.classList.remove('open'); pick.innerHTML = ''; pickId = null; if(ty() === 'r') rerender(); }
@@ -720,8 +806,10 @@ pick.addEventListener('click', e=>{
   if(e.target === pick || e.target.closest('[data-pkx]')){ closePick(); return; }
   const p = e.target.closest('[data-pn]'); if(!p) return;
   const r = routines[pickId], n = p.dataset.pn; if(!r) return;
-  snapR(); const i = r.items.indexOf(n);
-  if(i >= 0){ r.items.splice(i, 1); toast('Quitado'); } else { r.items.push(n); toast('Añadido'); }
+  /* en esta sección: si ya está, se quita; si no, se añade al final de la sección */
+  let j = -1; for(let k = pickAt - 1; k >= 0 && typeof r.items[k] === 'string'; k--) if(r.items[k] === n){ j = k; break; }
+  snapR();
+  if(j >= 0){ r.items.splice(j, 1); pickAt--; toast('Quitado'); } else { r.items.splice(pickAt, 0, n); pickAt++; toast('Añadido'); }
   saveR(); const y = $('#pkl').scrollTop; drawPick(); $('#pkl').scrollTop = y;
 });
 pick.addEventListener('input', e=>{ if(e.target.id === 'pkq'){ pickQ = e.target.value; drawPick(); } });
@@ -750,14 +838,13 @@ function renderAll(){
 function renderSearch(){
   const k = ty(), qq = norm(q.trim()), hit = x=> !qq || norm(x.n).includes(qq) || norm(x.d).includes(qq) || norm(x.h).includes(qq) || (x.techs && norm(x.techs.join(' ')).includes(qq));
   let h = `<div class="page" style="padding-top:8px">${chipsHTML()}`, shown = 0;
-  if(k === 'r'){ const its = DR.filter(x=> passes(x) && hit(x)); shown = its.length; if(shown) h += `<div class="sf">Ejercicios<small>${shown}</small></div><div class="grid">${its.map(x=> card(x)).join('')}</div>`; }
-  else DATA.forEach(f=>{
+  DATA.forEach(f=>{
     const its = ofType(f, k).filter(x=> passes(x) && hit(x));
     if(!its.length) return; shown += its.length;
     h += `<div class="sf"><a data-fam="${f.id}" style="background:${f.color};color:${isDark(f.color) ? '#fff' : '#1c1c1e'}">${esc(f.name)}</a><small>${its.length}</small></div><div class="grid">${its.map(x=> card(x)).join('')}</div>`;
   });
   if(!shown) h += `<div class="empty">Nada con «${esc(q)}» en ${esc(TABN[k])}.</div>`;
-  const others = ['t', 'c', 'r'].filter(o=> o !== k).map(o=> [o, (o === 'r' ? DR : ALL.filter(x=> x.t === o)).filter(x=> passes(x) && hit(x)).length]).filter(a=> a[1]);
+  const others = ['t', 'c'].filter(o=> o !== k).map(o=> [o, ALL.filter(x=> x.t === o).filter(x=> passes(x) && hit(x)).length]).filter(a=> a[1]);
   if(others.length) h += `<div class="chips" style="padding-top:16px">${others.map(([o, n])=> `<button class="chip" data-swap="${o}">${n} más en ${esc(TABN[o])} →</button>`).join('')}</div>`;
   body.innerHTML = h + '</div>';
 }
@@ -829,17 +916,18 @@ document.addEventListener('click', e=>{
   const tb = t.closest('[data-tab]'); if(tb){ if(cur().t === 'search'){ stack[pos].ty = tb.dataset.tab; render(true); } else if(!(cur().t === 'root' && ty() === tb.dataset.tab)) go({ t: 'root', ty: tb.dataset.tab }); return; }
   const sw = t.closest('[data-swap]'); if(sw){ stack[pos].ty = sw.dataset.swap; render(true); return; }
   if(t.closest('[data-pend]')){ filt.pend = !filt.pend; rerender(); return; }
-  const rv = t.closest('[data-rv]'); if(rv){ rview = rv.dataset.rv; render(true); return; }
   if(t.closest('[data-undo]')){ if(undoSt.length){ routines = JSON.parse(undoSt.pop()); saveR(); rerender(); toast('Deshecho'); } return; }
   if(t.closest('[data-rnew]')){ snapR(); const id = newRoutine(''); saveR(); rerender(); const inp = $(`[data-rid="${id}"] [data-rname]`); if(inp){ inp.scrollIntoView({ block: 'center' }); inp.focus(); } return; }
   const blk = t.closest('[data-rid]'), rid = blk && blk.dataset.rid, R = rid && routines[rid];
   if(R && t.closest('[data-rdel]')){ if(!confirm('¿Borrar la rutina «' + rName(R) + '»?')) return; snapR(); delete routines[rid]; saveR(); rerender(); toast('Rutina borrada · ↶ para deshacer'); return; }
   if(R && t.closest('[data-rcol]')){ snapR(); R.color = RCOL[(RCOL.indexOf(R.color) + 1) % RCOL.length]; saveR(); rerender(); return; }
-  if(R && t.closest('[data-radd]')){ openPick(rid); return; }
+  if(R && t.closest('[data-radd]')){ openPick(rid, R.items.length); return; }
+  const rh = t.closest('[data-rh]'); if(R && rh){ snapR(); const lv = +rh.dataset.rh; R.items.push(lv === 1 ? { h: 1, t: '' } : { h: 2, t: '', d: '' }); saveR(); rerender(); const ins = blk.ownerDocument.querySelectorAll(`[data-rid="${rid}"] [data-ii="${R.items.length - 1}"] [data-hed=t]`); if(ins[0]){ ins[0].focus(); ins[0].scrollIntoView({ block: 'center' }); } return; }
+  const ha = t.closest('[data-hadd]'); if(R && ha){ const i = +ha.dataset.hadd; openPick(rid, sectionEnd(R, i), R.items[i].t || (R.items[i].h === 1 ? 'título' : 'ejercicio')); return; }
+  if(R && t.closest('[data-rm]')){ const i = +t.closest('[data-rm]').dataset.rm, x = R.items[i]; if(typeof x !== 'string' && (x.t || x.d) && !confirm('¿Quitar «' + (x.t || 'sin nombre') + '»? Sus fichas se quedan.')) return; snapR(); R.items.splice(i, 1); saveR(); rerender(); return; }
+  if(R && t.closest('[data-up]')){ const i = +t.closest('[data-up]').dataset.up; snapR(); [R.items[i - 1], R.items[i]] = [R.items[i], R.items[i - 1]]; saveR(); rerender(); return; }
   const c = t.closest('.card'); if(!c) return;
   const n = c.dataset.name;
-  if(R && t.closest('[data-rm]')){ snapR(); R.items.splice(+t.closest('[data-rm]').dataset.rm, 1); saveR(); rerender(); return; }
-  if(R && t.closest('[data-up]')){ const i = +t.closest('[data-up]').dataset.up; snapR(); [R.items[i - 1], R.items[i]] = [R.items[i], R.items[i - 1]]; saveR(); rerender(); return; }
   if(t.closest('[data-add]')){ addFlow(n, t.closest('[data-add]')); return; }
   if(t.closest('[data-ck]')){ const on = toggle(n); if(filt.pend && on || R){ rerender(); } else { c.classList.toggle('done', on); t.closest('[data-ck]').classList.toggle('on', on); } toast(on ? 'Conseguido' : 'Desmarcado'); return; }
   copy(n);
@@ -848,33 +936,35 @@ document.addEventListener('input', e=>{
   const b = e.target.closest && e.target.closest('[data-rid]'); if(!b || !routines[b.dataset.rid]) return;
   if(e.target.matches('[data-rname]')){ routines[b.dataset.rid].name = e.target.value; saveR(); }
   if(e.target.matches('[data-rnote]')){ routines[b.dataset.rid].note = e.target.value; saveR(); }
+  const hi = e.target.closest('[data-ii]'); if(hi && e.target.dataset.hed){ const x = routines[b.dataset.rid].items[+hi.dataset.ii]; if(x && typeof x === 'object'){ x[e.target.dataset.hed] = e.target.value; saveR(); if(e.target.tagName === 'TEXTAREA') fit(e.target); } }
 });
 qIn.addEventListener('input', e=>{
   q = e.target.value;
   if(!q.trim()){ if(cur().t === 'search') back(); return; }
-  if(cur().t === 'search') render(false); else go({ t: 'search' });
+  if(cur().t === 'search') render(false); else go({ t: 'search', ty: ty() === 'r' ? 't' : ty() });
 });
 document.addEventListener('keydown', e=>{
-  if(e.key === 'Enter' && e.target.matches && e.target.matches('[data-rname]')){ e.target.blur(); return; }
+  if(e.key === 'Enter' && e.target.matches && e.target.matches('[data-rname],.rt1,.rt2')){ e.preventDefault(); e.target.blur(); return; }
   if(e.key !== 'Escape') return;
   if(document.getElementById('ml-gh').classList.contains('open')) return;
   if(pick.classList.contains('open')){ closePick(); return; }
   if(menu.classList.contains('open')){ closeMenu(); return; }
   if(lad.classList.contains('open')){ closeLad(); return; }
-  if(e.target.matches('[data-rname],[data-rnote]')){ e.target.blur(); return; }
+  if(e.target.matches('[data-rname],[data-rnote],[data-hed]')){ e.target.blur(); return; }
   if(e.target.matches('input')){ if(q){ q = ''; qIn.value = ''; if(cur().t === 'search') back(); } qIn.blur(); return; }
   back();
 });
 window.mlApply = function(m){
   checks = m.c || {}; routines = {}; Object.entries(m.r || {}).forEach(([id, r])=> routines[id] = normR(r));
   try{ localStorage.setItem(CK, JSON.stringify(checks)); localStorage.setItem(RK, JSON.stringify(routines)); }catch(e){}
-  const a = document.activeElement; if(a && a.matches && a.matches('[data-rname],[data-rnote],#pkq')) return;
+  const a = document.activeElement; if(a && a.matches && a.matches('[data-rname],[data-rnote],[data-hed],#pkq')) return;
   if(pick.classList.contains('open')) drawPick(); rerender();
 };
 window.mlData = ()=> ({ c: checks, r: routines });
 window.mlNormR = normR;
 
 render(true);
+if(migrated) setTimeout(()=> window.mlDirty && window.mlDirty(), 0);
 const bh = document.getElementById('boot-hide');
 if(bh) requestAnimationFrame(()=> requestAnimationFrame(()=> bh.remove()));
 })();
