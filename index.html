@@ -82,8 +82,13 @@ svg{display:block;}
 .card b{display:block;font-size:15px;}
 .card .an{display:block;font-size:13px;opacity:.75;margin-top:3px;line-height:1.3;}
 .card .sb{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;opacity:.55;margin-top:6px;}
-.card .sb2{display:block;font-size:12.5px;opacity:.8;margin-top:3px;line-height:1.3;}
-.card .sb2 i{display:inline-block;min-width:34px;font-style:normal;font-weight:700;font-size:10px;letter-spacing:.04em;opacity:.6;margin-right:4px;}
+.card .sb2{display:flex;align-items:flex-start;gap:6px;font-size:12.5px;margin-top:4px;line-height:1.3;}
+.card .sb2 span{opacity:.85;padding-top:1px;}
+.card .sb2 i{display:inline-flex;gap:3px;flex-shrink:0;font-style:normal;}
+.card .sb2 i b{display:inline-block;min-width:30px;text-align:center;font-size:10px;font-weight:700;letter-spacing:.03em;line-height:1;padding:3px 5px;border-radius:5px;color:#fff;}
+.card .sb2 .gc{background:#6a4fb3;}
+.card .sb2 .ps{background:#0070d1;}
+.card .sb2 .who{background:#8e8e93;}
 .card .acts{position:absolute;right:6px;top:6px;display:flex;flex-direction:column;gap:4px;}
 .card .acts button{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(255,255,255,.55);color:#1c1c1e;}
 .card .acts button:hover{background:rgba(255,255,255,.9);}
@@ -735,8 +740,9 @@ function card(x, showFam, ri){
   const d = isDone(x.n), how = x.h && x.h !== '—' ? x.h : '', inR = ri != null;
   let sb = `<span class="sb">${esc((NLAB[x.l] || '') + (showFam && x.f ? ' · ' + x.f.name : ''))}</span>`;
   if(how){
-    if(x.f && x.f.id === 'personajes') sb += `<span class="sb2"><i>Quién</i>${esc(how)}</span>`;
-    else { const p = ps(how); sb += p === how ? `<span class="sb2"><i>GC·PS4</i>${esc(how)}</span>` : `<span class="sb2"><i>GC</i>${esc(how)}</span><span class="sb2"><i>PS4</i>${esc(p)}</span>`; }
+    const GC = '<b class="gc">GC</b>', PS = '<b class="ps">PS4</b>', line = (tags, txt)=> `<span class="sb2"><i>${tags}</i><span>${esc(txt)}</span></span>`;
+    if(x.f && x.f.id === 'personajes') sb += line('<b class="who">Quién</b>', how);
+    else { const p = ps(how); sb += p === how ? line(GC + PS, how) : line(GC, how) + line(PS, p); }
   }
   const acts = `<button class="${d ? 'on' : ''}" data-ck="1" title="Marcar conseguido" aria-label="Marcar conseguido">✓</button>` + (inR ? `<button data-rm="${ri}" title="Quitar de la rutina" aria-label="Quitar de la rutina">×</button>${ri > 0 ? `<button data-up="${ri}" title="Subir" aria-label="Subir">↑</button>` : ''}` : `<button data-add="1" title="Añadir a una rutina" aria-label="Añadir a una rutina">+</button>`);
   return `<div class="card${d ? ' done' : ''}${inR ? ' rc' : ''}" data-name="${esc(x.n)}" style="background:${NFILL[x.l] || '#e5e5ea'}"><b>${esc(x.n)}</b><span class="an">${esc(x.d)}</span>${sb}<span class="acts">${acts}</span></div>`;
