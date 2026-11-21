@@ -141,6 +141,8 @@ svg{display:block;}
 @media (min-width:600px){#play{align-items:center;}#play .pk{border-radius:18px;}}
 #play .padwrap{padding:0 14px;}
 .plcap{text-align:center;font-size:17px;font-weight:600;min-height:48px;padding:8px 16px 0;}
+.plkeys{text-align:center;font-size:13px;opacity:.6;min-height:18px;padding:2px 16px 0;}
+.plhint{text-align:center;font-size:12px;opacity:.45;padding:6px 0 0;}
 .pldots{display:flex;justify-content:center;gap:6px;padding:6px 0 4px;}
 .pldots i{width:9px;height:9px;border-radius:50%;background:var(--b);cursor:pointer;}
 .pldots i.on{background:#2f8cf5;}
@@ -572,7 +574,7 @@ const DATA = [
     ["Float cancel", 3, "t", "aéreos flotando para aterrizar sin lag", "Peach"],
     ["Wall jump", 2, "t", "saltar contra la pared", "Fox, Falco, Falcon, Sheik, Samus, Mario, Pikachu…"],
     ["Multiple jumps", 2, "c", "más de un salto en el aire", "Jigglypuff, Kirby"],
-    ["Tether", 2, "t", "agarrar el borde con el gancho; también aéreo con Z", "Link, Young Link, Samus"],
+    ["Wall grapple", 2, "t", "lanzar el gancho en el aire para engancharse a la pared del escenario y subir (en Melee no agarra el borde)", "Link, Young Link, Samus"],
     ["Rest", 2, "t", "el golpe de Jigglypuff que mata a muy poco porcentaje", "Jigglypuff"],
     ["Knee", 2, "t", "fair de Falcon; el punto dulce mata", "Captain Falcon"],
     ["Ken combo", 3, "t", "fair + dair (meteor) fuera del escenario", "Marth"],
@@ -674,7 +676,7 @@ const ROUTINE_TEMPLATE = [H1("Calentamiento"), H1("Laboratorio"), H1("Contra un 
 // duración con @ms y texto tras ". Se mira hacia la derecha.
 const ANIM = {
   "Walk": 'ls:e.5@1100"stick inclinado a medias → anda|@400',
-  "Dash": '@300|ls:e@700"stick a fondo de golpe → dash|@400',
+  "Dash": '@300"stick en reposo…|ls:e@700"stick a fondo de golpe → dash|@400',
   "Run": 'ls:e@1600"mantener a fondo → corre|@400',
   "Crouch": 'ls:s@1000"stick abajo → agachado|@400',
   "Turnaround": 'ls:w.35@500"toque suave atrás → se da la vuelta|@600',
@@ -781,7 +783,7 @@ const ANIM = {
   "Float cancel": 'o@500"mantener ○ → flota|o x@300"aéreo flotando|@200"soltar ○ al tocar suelo|@500',
   "Wall jump": '@400"pegado a una pared…|ls:w@400"stick hacia el otro lado → salta|@500',
   "Multiple jumps": 'o@200"salto|o@200"y otro|o@200"y otro|o@200"y otro|@500',
-  "Tether": 'o@200"cerca del borde, en el aire…|r1@400"R1 (o R2) → gancho|@600',
+  "Wall grapple": '@400"en el aire, junto a la pared del escenario…|r1@400"R1 → lanza el gancho|@600',
   "Rest": 'ls:s s@500"abajo + ▢ → Rest|@700',
   "Knee": 'o@120"salto|ls:e x@300"adelante + ✕ → rodilla|@600',
   "Ken combo": 'o@150"salto|ls:e x@300"fair|@300|ls:s x@300"dair (meteor)|@600',
@@ -972,18 +974,38 @@ function vec(s){
 function parseAnim(str){
   let cap = '';
   return String(str).split('|').map(seg=>{
-    const qi = seg.indexOf('"'); if(qi >= 0){ cap = seg.slice(qi + 1); seg = seg.slice(0, qi); }
+    const qi = seg.indexOf('"'); let own = null; if(qi >= 0){ own = seg.slice(qi + 1); seg = seg.slice(0, qi); }
     let d = 400; const at = seg.indexOf('@'); if(at >= 0){ d = +seg.slice(at + 1) || 400; seg = seg.slice(0, at); }
-    const st = { b: {}, ls: null, rs: null, l2: 0, r2: 0, d, c: cap };
+    const st = { b: {}, ls: null, rs: null, l2: 0, r2: 0, d, c: '' };
     seg.trim().split(/\s+/).filter(Boolean).forEach(tok=>{
       const m = /^(ls|rs):(.+)$/.exec(tok); if(m){ st[m[1]] = vec(m[2]); return; }
       const g = /^(l2|r2)(?::([\d.]+))?$/.exec(tok); if(g){ st[g[1]] = g[2] ? +g[2] : 1; return; }
       st.b[tok] = 1;
     });
+    const busy = Object.keys(st.b).length || st.ls || st.rs || st.l2 || st.r2;
+    if(own !== null) cap = own; else if(busy) cap = '';
+    st.c = cap;
     return st;
   });
 }
 const STICK_C = { ls: [346, 322], rs: [514, 322] };
+const KEYN = { x: '✕', o: '○', s: '▢', t: '△', r1: 'R1', l1: 'L1', opt: 'Options' };
+const AR8 = ['→', '↘', '↓', '↙', '←', '↖', '↑', '↗'];
+function arrow(v){
+  const a = Math.atan2(v[1], v[0]), i = (Math.round(a / (Math.PI / 4)) + 8) % 8, off = a - Math.round(a / (Math.PI / 4)) * Math.PI / 4;
+  if(Math.abs(off) < .12) return AR8[i];
+  /* entre dos direcciones: la principal y "un poco" hacia la vecina (p. ej. → un poco ↓) */
+  const ax = Math.abs(v[0]) >= Math.abs(v[1]), main = ax ? (v[0] > 0 ? '→' : '←') : (v[1] > 0 ? '↓' : '↑'), minor = ax ? (v[1] > 0 ? '↓' : '↑') : (v[0] > 0 ? '→' : '←');
+  return Math.abs(Math.abs(v[0]) - Math.abs(v[1])) < .2 ? AR8[i] : main + ' un poco ' + minor;
+}
+function keysText(st){
+  const p = [];
+  if(st.ls) p.push('stick izq. ' + arrow(st.ls) + (Math.hypot(st.ls[0], st.ls[1]) < .6 ? ' suave' : ''));
+  if(st.rs) p.push('stick der. ' + arrow(st.rs));
+  ['l2', 'r2'].forEach(k=>{ if(st[k]) p.push(k.toUpperCase() + (st[k] < 1 ? ' a medias' : '')); });
+  Object.keys(st.b).forEach(k=> p.push(KEYN[k] || k));
+  return p.length ? p.join(' + ') : 'nada pulsado';
+}
 function padApply(svg, st){
   st = st || { b: {}, ls: null, rs: null, l2: 0, r2: 0 };
   svg.querySelectorAll('[data-k]').forEach(g=>{
@@ -1003,8 +1025,8 @@ function padApply(svg, st){
 /* reproductor: sirve tanto en la ventana de cada ficha como en el mando de la pestaña Mando */
 const play = $('#play'); let pl = null;
 function playerHTML(n){
-  return `<div class="plcap"></div><div class="pldots">${Array.from({ length: n }, (_, i)=> `<i data-i="${i}"></i>`).join('')}</div>
-    <div class="plctl"><button data-pl="prev" aria-label="Paso anterior">‹</button><button data-pl="toggle" class="pltog" aria-label="Pausa">❚❚</button><button data-pl="next" aria-label="Paso siguiente">›</button><span class="sep"></span>${[1, .5, .25].map(s=> `<button class="chip${s === 1 ? ' on' : ''}" data-spd="${s}">${s === 1 ? '1×' : s === .5 ? '½×' : '¼×'}</button>`).join('')}</div>`;
+  return `<div class="plcap"></div><div class="plkeys"></div><div class="pldots">${Array.from({ length: n }, (_, i)=> `<i data-i="${i}"></i>`).join('')}</div>
+    <div class="plctl"><button data-pl="prev" aria-label="Paso anterior">‹</button><button data-pl="toggle" class="pltog" aria-label="Pausa">❚❚</button><button data-pl="next" aria-label="Paso siguiente">›</button><span class="sep"></span>${[1, .5, .25].map(s=> `<button class="chip${s === 1 ? ' on' : ''}" data-spd="${s}">${s === 1 ? '1×' : s === .5 ? '½×' : '¼×'}</button>`).join('')}</div><div class="plhint">el personaje mira a la derecha →</div>`;
 }
 function startPlayer(box, svg, name){
   stopPlayer();
@@ -1023,6 +1045,7 @@ function plShow(i){
   pl.i = i; const st = pl.steps[i];
   padApply(pl.svg, st);
   $('.plcap', pl.box).textContent = st.c || ' ';
+  $('.plkeys', pl.box).textContent = keysText(st);
   pl.box.querySelectorAll('.pldots i').forEach((d, k)=> d.classList.toggle('on', k === i));
 }
 function plNext(){
@@ -1060,7 +1083,7 @@ const PADINFO = {
   ls: ['Stick izquierdo · stick de control', 'Moverse. A medias anda; de golpe hace dash. Arriba salta; abajo agacha y hace fast fall. También el DI.'],
   rs: ['Stick derecho · C-stick', 'Smash en el suelo y aéreos en el aire, sin mover al personaje. También DI y ASDI.'],
   opt: ['Options · Start', 'Pausa. En pausa, L2 + R2 + ✕ y Options para salir de la partida.'],
-  du: ['Cruceta · D-pad', 'Sin uso en las partidas; sirve en los menús.'], dd: 0, dl: 0, dr: 0,
+  du: ['Cruceta · D-pad', 'Arriba: burla (taunt). El resto no se usa en las partidas; sirve en los menús.'], dd: 0, dl: 0, dr: 0,
   share: ['Share', 'Sin uso en Melee.'], touch: ['Panel táctil', 'Sin uso en Melee.'], ps: ['Botón PS', 'Sin uso en Melee.'],
 };
 function padInfo(k){
@@ -1134,7 +1157,7 @@ function drawPick(){
   const sec0 = r.items.slice(0, pickAt);
   const row = x=> { const inn = sec0.lastIndexOf(x.n) > -1 && sec0.slice(sec0.lastIndexOf(x.n)).every(y=> typeof y === 'string'); return `<button class="prow${inn ? ' in' : ''}" data-pn="${esc(x.n)}"><span class="pd" style="background:${NFILL[x.l]}"></span><span class="pn">${esc(x.n)}<small>${esc(x.f.name)}</small></span><span class="pi">${inn ? '✓' : '+'}</span></button>`; };
   const sec = (title, its)=> its.length ? `<div class="pkt">${title}</div>` + its.map(row).join('') : '';
-  const h = sec('Técnica', ALL.filter(x=> x.t === 't' && hit(x))) + sec('Conceptos', ALL.filter(x=> x.t === 'c' && hit(x)));
+  const h = sec('Mando', ALL.filter(x=> x.t === 'm' && hit(x))) + sec('Técnica', ALL.filter(x=> x.t === 't' && hit(x))) + sec('Conceptos', ALL.filter(x=> x.t === 'c' && hit(x)));
   $('#pkl').innerHTML = h || `<div class="empty">Nada con «${esc(pickQ)}».</div>`;
 }
 function closePick(){ if(!pick.classList.contains('open')) return; pick.classList.remove('open'); pick.innerHTML = ''; pickId = null; if(ty() === 'r') rerender(); }
