@@ -773,6 +773,19 @@ const ANIM = {
   "Shield drop": 'r2@400"escudo sobre la plataforma|r2 ls:sw@250"stick abajo en diagonal|@600',
   "Drop cancel": 'ls:s@150"bajar|x@250"aéreo al instante|@600',
   "Slideoff DI": 'rs:s ls:e@800"stick dcho abajo + izq. hacia el borde|@500',
+  "Shine": 'ls:s s@400"abajo + ▢ → shine|@600',
+  "Waveshine": 'ls:s s@150"shine|o@80"○|r2 ls:se@300"R2 + diagonal → wavedash|@600',
+  "Multishine": 'ls:s s@120"shine|o@80"○|ls:s s@120"shine|o@80"○|ls:s s@120"shine|@500',
+  "Short hop laser": 'o@70"short hop|s@200"▢ → láser|@600',
+  "Double jump cancel": 'o@200"salto|o@120"doble salto|x@300"✕ enseguida: corta la subida|@600',
+  "Float cancel": 'o@500"mantener ○ → flota|o x@300"aéreo flotando|@200"soltar ○ al tocar suelo|@500',
+  "Wall jump": '@400"pegado a una pared…|ls:w@400"stick hacia el otro lado → salta|@500',
+  "Multiple jumps": 'o@200"salto|o@200"y otro|o@200"y otro|o@200"y otro|@500',
+  "Tether": 'o@200"cerca del borde, en el aire…|r1@400"R1 (o R2) → gancho|@600',
+  "Rest": 'ls:s s@500"abajo + ▢ → Rest|@700',
+  "Knee": 'o@120"salto|ls:e x@300"adelante + ✕ → rodilla|@600',
+  "Ken combo": 'o@150"salto|ls:e x@300"fair|@300|ls:s x@300"dair (meteor)|@600',
+  "Desync": 'ls:s s@300"un Ice Climber hace un especial…|ls:e@300"…mientras el otro se mueve|@600',
 };
 
 </script>
@@ -867,6 +880,7 @@ function crumb(){
   try{ localStorage.setItem('ml_tab', s.ty); }catch(e){}
 }
 function render(anim){
+  if(pl && !play.classList.contains('open')) stopPlayer();
   crumb(); body.scrollTop = 0;
   const s = cur();
   if(s.t === 'root') (s.ty === 'r' ? renderRut() : renderRoot()); else if(s.t === 'fam') renderFam(DATA.find(f=> f.id === s.id)); else if(s.t === 'all') renderAll(); else renderSearch();
@@ -882,7 +896,8 @@ function renderRoot(){
   const k = ty(), its = ALL.filter(x=> x.t === k), done = its.filter(x=> isDone(x.n)).length;
   const row = (attr, sq, name, n, d)=> `<button class="row" ${attr}><span class="sq" style="${sq}"></span><span class="rn">${esc(name)}</span><span class="rs">${n}${d ? ' · ✓' + d : ''}</span>${CHEV}</button>`;
   const rows = DATA.map(f=>{ const it = ofType(f, k); if(!it.length) return ''; return row(`data-fam="${f.id}"`, 'background:' + f.color, f.name, it.length, it.filter(x=> isDone(x.n)).length); }).join('');
-  const padTop = k === 'm' ? `<div class="padbox"><div class="padwrap" id="padm">${PAD}</div><div class="padinfo" id="padinfo"><b>Tu mando</b><span>Toca una pieza para ver qué hace en Melee.</span></div></div>` : '';
+  const padTop = k === 'm' ? `<div class="padbox"><div class="padwrap" id="padm">${PAD}</div><div class="padinfo" id="padinfo"><b>Tu mando</b><span>Toca una pieza para ver qué hace en Melee. Para ver una técnica en el mando, pulsa ▶ en su ficha.</span></div></div>` : '';
+  if(pl && !play.classList.contains('open')) stopPlayer();
   body.innerHTML = `<div class="page"><div class="lh">${esc(TABN[k])}<small>✓ ${done} / ${its.length}</small></div>${padTop}<div class="list" style="margin-bottom:12px">${row('data-all="1"', ALLSQ, ALLN[k], its.length, done)}</div><div class="list">${rows}</div></div>`;
 }
 
@@ -978,43 +993,51 @@ function padApply(svg, st){
       const v = st[k], cap = g.querySelector('.pk-cap'), dir = g.querySelector('.pk-dir'), [cx, cy] = STICK_C[k];
       g.classList.toggle('on', !!v);
       cap.style.transform = v ? `translate(${v[0] * 18}px,${v[1] * 18}px)` : '';
-      const m = Math.hypot(v ? v[0] : 0, v ? v[1] : 0) || 1, ux = v ? v[0] / m : 0, uy = v ? v[1] / m : 0, L = 50 + 12 * Math.min(1, m), tx = cx + ux * L, ty = cy + uy * L;
+      const m = Math.hypot(v ? v[0] : 0, v ? v[1] : 0) || 1, ux = v ? v[0] / m : 0, uy = v ? v[1] / m : 0, L = 60 + 14 * Math.min(1, m), tx = cx + ux * L, ty = cy + uy * L;
       dir.setAttribute('d', v ? `M${cx} ${cy} L${tx} ${ty} M${tx - ux * 9 - uy * 6} ${ty - uy * 9 + ux * 6} L${tx} ${ty} L${tx - ux * 9 + uy * 6} ${ty - uy * 9 - ux * 6}` : `M${cx} ${cy} L${cx} ${cy}`);
       return;
     }
     g.classList.toggle('on', !!st.b[k]);
   });
 }
-/* reproductor */
+/* reproductor: sirve tanto en la ventana de cada ficha como en el mando de la pestaña Mando */
 const play = $('#play'); let pl = null;
-function openPlay(name){
+function playerHTML(n){
+  return `<div class="plcap"></div><div class="pldots">${Array.from({ length: n }, (_, i)=> `<i data-i="${i}"></i>`).join('')}</div>
+    <div class="plctl"><button data-pl="prev" aria-label="Paso anterior">‹</button><button data-pl="toggle" class="pltog" aria-label="Pausa">❚❚</button><button data-pl="next" aria-label="Paso siguiente">›</button><span class="sep"></span>${[1, .5, .25].map(s=> `<button class="chip${s === 1 ? ' on' : ''}" data-spd="${s}">${s === 1 ? '1×' : s === .5 ? '½×' : '¼×'}</button>`).join('')}</div>`;
+}
+function startPlayer(box, svg, name){
+  stopPlayer();
   const steps = parseAnim(ANIM[name]); if(!steps.length) return;
-  play.innerHTML = `<div class="pk" role="dialog"><div class="pkh"><span>${esc(name)}</span><button data-plx="1">Cerrar</button></div>
-    <div class="padwrap">${PAD}</div><div class="plcap" id="plcap"></div><div class="pldots" id="pldots">${steps.map((_, i)=> `<i data-i="${i}"></i>`).join('')}</div>
-    <div class="plctl"><button data-pl="prev" aria-label="Paso anterior">‹</button><button data-pl="toggle" id="pltog" aria-label="Pausa">❚❚</button><button data-pl="next" aria-label="Paso siguiente">›</button><span class="sep"></span>${[1, .5, .25].map(s=> `<button class="chip${s === 1 ? ' on' : ''}" data-spd="${s}">${s === 1 ? '1×' : s === .5 ? '½×' : '¼×'}</button>`).join('')}</div></div>`;
-  play.classList.add('open');
-  pl = { steps, i: -1, spd: 1, run: true, t: 0, svg: $('svg', play) };
+  box.innerHTML = playerHTML(steps.length);
+  pl = { steps, i: -1, spd: 1, run: true, t: 0, svg, box, name };
   plNext();
+}
+function stopPlayer(){ if(pl){ clearTimeout(pl.t); padApply(pl.svg, null); pl = null; } }
+function openPlay(name){
+  play.innerHTML = `<div class="pk" role="dialog"><div class="pkh"><span>${esc(name)}</span><button data-plx="1">Cerrar</button></div><div class="padwrap">${PAD}</div><div class="plbox"></div></div>`;
+  play.classList.add('open');
+  startPlayer($('.plbox', play), $('svg', play), name);
 }
 function plShow(i){
   pl.i = i; const st = pl.steps[i];
   padApply(pl.svg, st);
-  $('#plcap').textContent = st.c || ' ';
-  play.querySelectorAll('#pldots i').forEach((d, k)=> d.classList.toggle('on', k === i));
+  $('.plcap', pl.box).textContent = st.c || ' ';
+  pl.box.querySelectorAll('.pldots i').forEach((d, k)=> d.classList.toggle('on', k === i));
 }
 function plNext(){
-  clearTimeout(pl.t);
+  if(!pl) return; clearTimeout(pl.t);
   if(pl.i >= pl.steps.length - 1){ padApply(pl.svg, null); pl.i = -1; if(pl.run){ pl.t = setTimeout(plNext, 650 / pl.spd); return; } }
   plShow(pl.i + 1);
   if(pl.run) pl.t = setTimeout(plNext, pl.steps[pl.i].d / pl.spd);
 }
-function plSetRun(r){ pl.run = r; $('#pltog').textContent = r ? '❚❚' : '▶'; clearTimeout(pl.t); if(r) pl.t = setTimeout(plNext, 300 / pl.spd); }
-function closePlay(){ if(!play.classList.contains('open')) return; if(pl) clearTimeout(pl.t); pl = null; play.classList.remove('open'); play.innerHTML = ''; }
-play.addEventListener('click', e=>{
-  if(e.target === play || e.target.closest('[data-plx]')){ closePlay(); return; }
-  if(!pl) return;
-  const b = e.target.closest('[data-pl]'), s = e.target.closest('[data-spd]'), dot = e.target.closest('#pldots i');
-  if(s){ pl.spd = +s.dataset.spd; play.querySelectorAll('[data-spd]').forEach(c=> c.classList.toggle('on', c === s)); if(pl.run){ clearTimeout(pl.t); pl.t = setTimeout(plNext, pl.steps[Math.max(pl.i, 0)].d / pl.spd); } return; }
+function plSetRun(r){ pl.run = r; $('.pltog', pl.box).textContent = r ? '❚❚' : '▶'; clearTimeout(pl.t); if(r) pl.t = setTimeout(plNext, 300 / pl.spd); }
+function closePlay(){ if(!play.classList.contains('open')) return; stopPlayer(); play.classList.remove('open'); play.innerHTML = ''; }
+play.addEventListener('click', e=>{ if(e.target === play || e.target.closest('[data-plx]')) closePlay(); });
+document.addEventListener('click', e=>{
+  if(!pl || !e.target.closest || !pl.box.contains(e.target)) return;
+  const b = e.target.closest('[data-pl]'), s = e.target.closest('[data-spd]'), dot = e.target.closest('.pldots i');
+  if(s){ pl.spd = +s.dataset.spd; pl.box.querySelectorAll('[data-spd]').forEach(c=> c.classList.toggle('on', c === s)); if(pl.run){ clearTimeout(pl.t); pl.t = setTimeout(plNext, pl.steps[Math.max(pl.i, 0)].d / pl.spd); } return; }
   if(dot){ plSetRun(false); plShow(+dot.dataset.i); return; }
   if(!b) return;
   const a = b.dataset.pl;
@@ -1023,6 +1046,7 @@ play.addEventListener('click', e=>{
   if(a === 'next') plShow(pl.i >= pl.steps.length - 1 ? 0 : pl.i + 1);
   if(a === 'prev') plShow(pl.i <= 0 ? pl.steps.length - 1 : pl.i - 1);
 });
+
 /* qué hace cada pieza (portada del Mando) */
 const PADINFO = {
   x: ['✕ · A en GameCube', 'Ataque: jab, tilts, smash y aéreos. Con escudo: agarre. En el borde: subir atacando.'],
