@@ -31,8 +31,8 @@ html,body{height:100%;}
 body{position:fixed;inset:0;overflow:hidden;background:#fff;color:#1c1c1e;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:15px;line-height:1.3;
   -webkit-text-size-adjust:100%;text-size-adjust:100%;-webkit-user-select:none;user-select:none;
-  --dot:rgba(0,0,0,.2);--panel:rgba(255,255,255,.94);--b:rgba(0,0,0,.09);--h:rgba(0,0,0,.06);--sel:#2f8cf5;--solid:#fff;}
-:root.dark body{background:#1b1b1d;color:#ececec;--dot:rgba(255,255,255,.16);--panel:rgba(44,44,46,.95);--b:rgba(255,255,255,.12);--h:rgba(255,255,255,.09);--solid:#2c2c2e;}
+  --dot:rgba(0,0,0,.2);--panel:rgba(255,255,255,.94);--b:rgba(0,0,0,.09);--h:rgba(0,0,0,.06);--sel:#2f8cf5;--solid:#fff;--ink:#1c1c1e;--capon:#d6e8fe;}
+:root.dark body{background:#1b1b1d;color:#ececec;--dot:rgba(255,255,255,.16);--panel:rgba(44,44,46,.95);--b:rgba(255,255,255,.12);--h:rgba(255,255,255,.09);--solid:#2c2c2e;--ink:#ececec;--capon:#1d3d63;}
 button,input{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0;}
 svg{display:block;}
 #app{position:absolute;inset:0;display:flex;flex-direction:column;}
@@ -50,8 +50,9 @@ svg{display:block;}
 .search{display:flex;align-items:center;gap:4px;flex:1 1 150px;min-width:130px;}
 .search input{flex:1;min-width:0;height:36px;padding:0 8px !important;font-size:16px;outline:none;cursor:text !important;-webkit-user-select:text;user-select:text;}
 
-.tabs{display:flex;gap:6px;padding:0 10px 8px;flex-shrink:0;}
-.tab{padding:7px 16px !important;border-radius:16px;background:var(--h) !important;font-weight:600;white-space:nowrap;}
+.tabs{display:flex;gap:6px;padding:0 10px 8px;flex-shrink:0;overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:7px 13px !important;flex-shrink:0;border-radius:16px;background:var(--h) !important;font-weight:600;white-space:nowrap;}
 .tab.on{background:var(--sel) !important;color:#fff !important;}
 /* cuerpo */
 .body{flex:1;position:relative;overflow:auto;-webkit-overflow-scrolling:touch;background-image:radial-gradient(circle,var(--dot) 1.1px,transparent 1.3px);background-size:22px 22px;}
@@ -93,7 +94,6 @@ svg{display:block;}
 .card .acts button{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(255,255,255,.55);color:#1c1c1e;}
 .card .acts button:hover{background:rgba(255,255,255,.9);}
 .card .acts button.on{background:#34c759;color:#fff;}
-.card.rc{min-height:112px;}
 /* rutinas */
 .blk{border-radius:16px;padding:10px;margin:10px 0 14px;}
 .bh{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
@@ -115,6 +115,38 @@ svg{display:block;}
 .hacts{display:flex;gap:4px;flex-shrink:0;}
 .hacts button{width:28px;height:28px;border-radius:8px;background:var(--h);display:flex;align-items:center;justify-content:center;font-size:15px;}
 .hacts button:hover{background:var(--b);}
+/* mando */
+.padbox{background:var(--panel);border-radius:16px;box-shadow:0 0 0 .5px var(--b);padding:10px 10px 12px;margin-bottom:12px;}
+.padwrap{color:var(--ink);max-width:520px;margin:0 auto;}
+.pad{display:block;width:100%;height:auto;}
+.pad [data-k]{cursor:pointer;}
+.pad .pk-f{fill:transparent;transition:fill .08s,stroke .08s;}
+.pad g.on .pk-f{fill:#2f8cf5;stroke:#2f8cf5;}
+.pad g.pk-trig.on .pk-f{fill-opacity:var(--a,1);}
+.pad g.on .pk-s{stroke:#fff;}
+.pad g.sel .pk-f{fill:rgba(47,140,245,.28);stroke:#2f8cf5;}
+.pad .pk-trig{transition:transform .08s;transform-box:fill-box;}
+.pad .pk-cap{transition:transform .07s;}
+.pad .pk-dir{stroke:#2f8cf5;opacity:0;}
+.pad g.on .pk-dir{opacity:.85;}
+.pad .pk-cap .pk-f{fill:var(--solid);}
+.pad g.on .pk-cap .pk-f{fill:var(--capon);stroke:#2f8cf5;}
+.padinfo{display:flex;flex-direction:column;gap:2px;padding:8px 6px 0;min-height:52px;}
+.padinfo b{font-size:15px;}
+.padinfo span{font-size:14px;opacity:.75;}
+.card .acts button.pl{background:#2f8cf5;color:#fff;font-size:12px;}
+#play{position:fixed;inset:0;z-index:910;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);}
+#play.open{display:flex;}
+#play .pk{background:var(--solid);width:100%;max-width:560px;max-height:92vh;border-radius:18px 18px 0 0;display:flex;flex-direction:column;overflow:auto;box-shadow:0 8px 30px rgba(0,0,0,.3);padding-bottom:calc(12px + env(safe-area-inset-bottom,0px));}
+@media (min-width:600px){#play{align-items:center;}#play .pk{border-radius:18px;}}
+#play .padwrap{padding:0 14px;}
+.plcap{text-align:center;font-size:17px;font-weight:600;min-height:48px;padding:8px 16px 0;}
+.pldots{display:flex;justify-content:center;gap:6px;padding:6px 0 4px;}
+.pldots i{width:9px;height:9px;border-radius:50%;background:var(--b);cursor:pointer;}
+.pldots i.on{background:#2f8cf5;}
+.plctl{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 12px 4px;flex-wrap:wrap;}
+.plctl [data-pl]{width:44px;height:40px;border-radius:12px;background:var(--h);font-size:18px;font-weight:700;}
+.plctl .sep{width:1px;height:24px;background:var(--b);margin:0 6px;}
 /* elegir ejercicios */
 #pick{position:fixed;inset:0;z-index:900;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.35);}
 #pick.open{display:flex;}
@@ -201,13 +233,14 @@ svg{display:block;}
     <div class="bar search"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" style="margin-left:8px;opacity:.6;flex-shrink:0"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg><input type="search" id="q" placeholder="buscar…" autocomplete="off" spellcheck="false"></div>
     <div class="bar"><button class="bt" data-v="menu" title="Más" aria-label="Más opciones"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><circle cx="5" cy="12" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="19" cy="12" r="1.9"/></svg></button></div>
   </div>
-  <div class="tabs"><button class="tab" data-tab="t">Técnica</button><button class="tab" data-tab="c">Conceptos</button><button class="tab" data-tab="r">Rutinas</button></div>
+  <div class="tabs"><button class="tab" data-tab="m">Mando</button><button class="tab" data-tab="t">Técnica</button><button class="tab" data-tab="c">Conceptos</button><button class="tab" data-tab="r">Rutinas</button></div>
   <div class="body" id="body"></div>
 </div>
 <div class="menu" id="menu"></div>
 <button class="notebtn" id="notebtn" title="Estructura de entrenamiento" aria-label="Estructura de entrenamiento"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4v-4h4v-4h4V8h4"/><path d="M4 20V4"/></svg></button>
 <div class="lad" id="lad"></div>
 <div id="pick"></div>
+<div id="play"></div>
 <div class="toast" id="toast"></div>
 <input type="file" id="imp" accept=".json,application/json" style="display:none">
 
@@ -215,321 +248,335 @@ svg{display:block;}
 // ── DATOS ──
 // Cada elemento: [nombre (inglés, como lo verás en vídeos y en la wiki), nivel (b/i/a/e), tipo (t técnica / c concepto), qué es, cómo se hace]
 const DATA = [
-{ id:"suelo", name:"Movimiento en suelo", desc:"cómo te desplazas por el escenario — la base de todo lo demás", subs:[
-  { name:"Desplazarse", items:[
-    ["Walk",1,"t","andar; lento, pero puedes atacar, agarrar o protegerte en cualquier momento","stick inclinado a medias"],
-    ["Dash",1,"t","arranque inicial de la carrera; rápido y fácil de cancelar","stick a fondo hacia un lado, de golpe"],
-    ["Run",1,"t","carrera continua tras el dash inicial; desde aquí ya no puedes dar la vuelta al instante","mantener el stick tras el dash"],
-    ["Crouch",1,"t","agacharse; reduce el impulso que recibes y es la salida rápida de la carrera","stick abajo"],
-    ["Run cancel",2,"t","cortar la carrera agachándote para poder atacar, agarrar o protegerte antes","corriendo → stick abajo"],
-    ["Turnaround",1,"t","darse la vuelta en el sitio sin moverse","toque suave del stick hacia atrás"],
-  ]},
-  { name:"Dash dance", items:[
-    ["Dash dance",1,"t","encadenar dashes a izquierda y derecha para amenazar, esquivar y engañar","stick de lado a lado, a fondo, rápido"],
-    ["Dashback",2,"t","dar la vuelta durante el dash inicial; es lo que hace posible el dash dance","stick al lado contrario dentro del dash (UCF lo hace fiable)"],
-    ["Long dash dance",2,"t","dashes completos para cubrir mucho terreno","dejar que cada dash recorra toda su distancia"],
-    ["Tight dash dance",2,"t","dashes muy cortos para amenazar sin moverte casi del sitio","cambiar de lado en los primeros frames de cada dash"],
-    ["Foxtrot",2,"t","encadenar dashes iniciales en la misma dirección sin pasar a correr","dash → soltar → dash otra vez al mismo lado"],
-  ]},
-  { name:"Avanzado", items:[
-    ["Pivot",3,"t","quedarte quieto mirando al otro lado justo tras un dash, listo para atacar como si estuvieras parado","dash → stick al lado contrario en el frame justo"],
-    ["Pivot tilt",3,"t","pivot seguido de un tilt; ataque rápido mientras te alejas","pivot → tilt"],
-    ["Moonwalk",4,"t","deslizarse hacia atrás con la animación de dash; más estilo que utilidad","media luna con el stick durante el dash"],
+{ id:"m-stick", name:"Stick izquierdo", desc:"moverse: cuánto y cómo inclinas el stick cambia lo que hace", color:"#0070d1", subs:[
+  { name:"Stick izquierdo", items:[
+    ["Walk", 1, "m", "andar; lento, pero puedes atacar, agarrar o protegerte en cualquier momento", "stick inclinado a medias"],
+    ["Dash", 1, "m", "arranque inicial de la carrera; rápido y fácil de cancelar", "stick a fondo hacia un lado, de golpe"],
+    ["Run", 1, "m", "carrera continua tras el dash inicial; desde aquí ya no puedes dar la vuelta al instante", "mantener el stick tras el dash"],
+    ["Crouch", 1, "m", "agacharse; reduce el impulso que recibes y es la salida rápida de la carrera", "stick abajo"],
+    ["Turnaround", 1, "m", "darse la vuelta en el sitio sin moverse", "toque suave del stick hacia atrás"],
+    ["Tap jump", 1, "m", "saltar con el stick hacia arriba; en Melee siempre está activo", "stick arriba de golpe"],
+    ["Air drift", 1, "m", "moverse a los lados en el aire; cada personaje tiene su velocidad y aceleración", "stick a los lados en el aire"],
   ]},
 ]},
-{ id:"aire", name:"Saltos y aire", desc:"despegar, moverse en el aire y caer cuando tú decides", subs:[
-  { name:"Saltar", items:[
-    ["Jumpsquat",1,"c","los frames de agacharse antes de despegar (de 3 a 9 según el personaje); en ellos puedes cancelar el salto","—"],
-    ["Full hop",1,"t","salto completo","mantener X/Y"],
-    ["Short hop",1,"t","salto corto; la base de casi todos los ataques aéreos en el suelo","pulsar y soltar X/Y antes de despegar"],
-    ["Double jump",1,"t","segundo salto en el aire; no lo recuperas hasta tocar suelo o agarrar el borde","X/Y en el aire"],
-    ["Tap jump",1,"t","saltar con el stick hacia arriba; en Melee siempre está activo","stick arriba de golpe"],
-  ]},
-  { name:"Controlar la caída", items:[
-    ["Air drift",1,"t","moverse a los lados en el aire; cada personaje tiene su velocidad y aceleración","stick a los lados en el aire"],
-    ["Fast fall",1,"t","caer mucho más rápido, para aterrizar antes o bajar a tiempo","stick abajo tras el punto más alto del salto"],
-    ["Delayed fast fall",2,"t","retrasar el fast fall para cambiar el momento de tu aterrizaje y engañar","esperar y luego stick abajo"],
-    ["Special fall",1,"c","caída indefensa tras un air dodge en el aire o un up-B; solo puedes desplazarte un poco y agarrar el borde","—"],
-  ]},
-]},
-{ id:"wavedash", name:"Air dodge y wavedash", desc:"la esquiva aérea y el deslizamiento que define el movimiento de Melee", subs:[
-  { name:"Air dodge", items:[
-    ["Air dodge",1,"t","esquiva en el aire en la dirección que marques; después quedas en special fall","L/R en el aire + dirección"],
-    ["Air dodge recovery",2,"t","usar el air dodge para acercarte al escenario como recuperación","L/R hacia el escenario"],
-  ]},
-  { name:"Wavedash", items:[
-    ["Wavedash",2,"t","air dodge en diagonal contra el suelo justo al despegar: deslizas sin dejar de estar en el suelo y puedes hacer cualquier cosa de suelo","salto → L/R + diagonal abajo, al despegar"],
-    ["Wavedash back",2,"t","wavedash hacia atrás: retirarte sin dejar de mirar al rival","salto → L/R + diagonal abajo-atrás"],
-    ["Wavedash angle",2,"c","cuanto más horizontal la diagonal, más lejos deslizas; cuanto más vertical, más corto","—"],
-    ["Perfect wavedash",3,"t","el ángulo más horizontal posible, para el máximo recorrido","diagonal casi horizontal (muesca)"],
-    ["Wavedash out of shield",2,"t","salir del escudo deslizándote, para castigar o escapar","escudo → salto → L/R diagonal abajo"],
-    ["Wavedash off ledge",3,"t","wavedash que te saca del escenario o plataforma, cayendo sin lag","wavedash hacia el borde"],
-    ["Traction",2,"c","de la tracción del personaje depende cuánto desliza: Luigi muchísimo, otros muy poco","—"],
-  ]},
-  { name:"Waveland", items:[
-    ["Waveland",2,"t","air dodge diagonal al aterrizar desde el aire: aterrizas al instante y deslizas","cayendo → L/R diagonal abajo al tocar suelo"],
-    ["Waveland on platform",2,"t","waveland para subir o bajar de plataformas sin lag","L/R diagonal al llegar a la plataforma"],
-  ]},
-]},
-{ id:"ataques", name:"Ataques y cancelaciones", desc:"qué golpes hay y cómo quitarles el tiempo muerto", subs:[
-  { name:"Tipos de ataque", items:[
-    ["Jab",1,"t","golpe rápido parado; corta presión y empieza combos","A"],
-    ["Tilts",1,"t","ataques de suelo dirigidos (forward, up y down tilt)","stick suave + A"],
-    ["Smash attacks",1,"t","ataques fuertes de suelo; se pueden cargar","stick fuerte + A, o C-stick"],
-    ["Dash attack",1,"t","ataque corriendo; muy arriesgado si falla","A durante dash o carrera"],
-    ["Aerials",1,"t","ataques en el aire: nair, fair, bair, uair y dair","A + dirección en el aire"],
-    ["C-stick aerials",1,"t","sacar los aéreos con el C-stick para no mover el stick y no estropear la deriva ni el fast fall","C-stick en el aire"],
-    ["Specials",1,"t","ataques especiales: neutral, side, up y down B","B + dirección"],
-    ["Turnaround tilt",2,"t","girarse y hacer un tilt hacia el otro lado","toque atrás → tilt"],
-  ]},
-  { name:"Reducir el lag", items:[
-    ["L-cancel",1,"t","reduce a la mitad el lag de aterrizaje de un aéreo","L, R o Z poco antes de aterrizar (unos 7 frames)"],
-    ["SHFFL",2,"t","short hop + aéreo + fast fall + L-cancel: el aéreo más rápido y seguro posible","short hop → aéreo → abajo → L"],
-    ["Auto-cancel",2,"c","algunos aéreos no tienen lag de aterrizaje si tocas suelo al principio o al final del movimiento","—"],
-    ["Edge cancel",3,"t","caer por el borde de una plataforma o del escenario durante el lag de aterrizaje para cancelarlo","aterrizar cerca del borde deslizando hacia él"],
-  ]},
-  { name:"Desde la carrera", items:[
-    ["Jump-cancelled grab",2,"t","usar el agarre de parado (mejor) mientras corres: saltas y agarras antes de despegar","dash → salto → Z al instante"],
-    ["Jump-cancelled up smash",2,"t","up smash mientras corres, cancelando el salto","dash → salto → up smash al instante"],
-    ["Boost grab",3,"t","dash attack cancelado al momento en un dash grab con impulso; agarre más largo","dash attack → Z en los primeros frames"],
-  ]},
-]},
-{ id:"escudo", name:"Escudo", desc:"defenderse y salir del escudo con algo útil", subs:[
-  { name:"El escudo", items:[
-    ["Shield",1,"t","burbuja que bloquea golpes; se encoge con el uso y se regenera al soltarla","L/R"],
-    ["Light shield",2,"t","escudo más grande y transparente: cubre mejor pero aguanta menos y te empuja más","gatillo apretado a medias"],
-    ["Shield tilt",2,"t","inclinar el escudo para tapar la zona que te atacan","stick con el escudo puesto"],
-    ["Powershield",3,"t","escudo levantado justo cuando llega el golpe; no pierdes escudo y reflejas proyectiles","L/R en el instante del impacto"],
-    ["Shieldstun",2,"c","tiempo que te quedas bloqueado al parar un golpe; más con light shield","—"],
-    ["Shield poke",2,"c","golpe a una parte del cuerpo que el escudo ya no cubre","—"],
-    ["Shield break",1,"c","si el escudo se vacía, se rompe y quedas aturdido sin poder hacer nada","—"],
-    ["Shield pressure",2,"c","encadenar ataques seguros sobre el escudo rival para forzarle a actuar","—"],
-    ["Shield drop lag",2,"c","soltar el escudo tarda 15 frames en Melee; por eso se sale de él con otras acciones","—"],
-  ]},
-  { name:"Salir del escudo (OoS)", items:[
-    ["Shield grab",1,"t","agarrar directamente desde el escudo; la respuesta más común a un ataque bloqueado","escudo + A"],
-    ["Jump out of shield",1,"t","saltar desde el escudo; posible con todos menos Yoshi","escudo → X/Y"],
-    ["Aerial out of shield",2,"t","saltar desde el escudo y lanzar un aéreo","escudo → salto → aéreo"],
-    ["Up-B out of shield",2,"t","up-B desde el escudo cancelando el salto","escudo → salto → up-B al instante"],
-    ["Up smash out of shield",2,"t","up smash desde el escudo cancelando el salto","escudo → salto → up smash al instante"],
-    ["Spot dodge",1,"t","esquiva en el sitio","escudo + abajo"],
-    ["Roll",1,"t","rodar a un lado; predecible si abusas","escudo + lado"],
-  ]},
-]},
-{ id:"agarres", name:"Agarres", desc:"la respuesta al escudo y el inicio de muchos combos", subs:[
-  { name:"Agarrar", items:[
-    ["Grab",1,"t","agarre de parado; atraviesa el escudo","Z (o escudo + A)"],
-    ["Dash grab",1,"t","agarre corriendo; más alcance hacia delante pero más lento y con más lag","Z corriendo"],
-    ["Pummel",1,"t","golpes pequeños mientras sujetas; daño extra","A durante el agarre"],
-    ["Throws",1,"t","lanzamientos hacia delante, atrás, arriba o abajo","stick durante el agarre"],
-  ]},
-  { name:"Escapar y encadenar", items:[
-    ["Mash out",1,"t","soltarse antes de un agarre moviendo stick y botones","girar el stick y pulsar botones"],
-    ["Grab release",2,"c","cuando te sueltas, ambos quedáis en una situación concreta según el personaje","—"],
-    ["Chaingrab",3,"c","volver a agarrar tras un lanzamiento sin que el rival pueda escapar (según personaje y %)","—"],
-  ]},
-]},
-{ id:"golpes", name:"Recibir golpes", desc:"lo que puedes hacer cuando te pegan: sobrevivir y escapar", subs:[
-  { name:"Al recibir un golpe", items:[
-    ["Knockback",1,"c","lo lejos que sales despedido; crece con tu porcentaje","—"],
-    ["Hitlag",2,"c","la congelación de unos frames cuando un golpe conecta; en ella se hace el SDI","—"],
-    ["Hitstun",1,"c","el tiempo tras el golpe en el que no puedes actuar","—"],
-    ["Tumble",2,"c","giro en el aire tras un golpe fuerte; si tocas suelo así sin tecnear, caes tumbado","—"],
-  ]},
-  { name:"Influir en la trayectoria", items:[
-    ["DI",1,"t","inclinar el stick al recibir el golpe cambia el ángulo con el que sales despedido","stick durante el golpe"],
-    ["Survival DI",1,"t","DI perpendicular a la trayectoria para sobrevivir más; en golpes horizontales, hacia arriba y hacia dentro","stick en diagonal arriba-dentro"],
-    ["Combo DI",2,"t","DI para salir del alcance del rival y romper combos","stick lejos de la continuación del rival"],
-    ["SDI",3,"t","desplazarte un poco durante el hitlag para salir de golpes múltiples o evitar el siguiente","toques repetidos del stick durante el hitlag"],
-    ["ASDI",3,"c","el stick o el C-stick sostenidos al acabar el hitlag te desplazan una sola vez","—"],
-    ["ASDI down",3,"t","quedarte pegado al suelo ante golpes débiles para poder responder","mantener abajo al recibir el golpe"],
-    ["Crouch cancel",2,"t","agachado recibes un tercio menos de impulso y puedes contraatacar","estar agachado antes del golpe"],
-    ["Meteor cancel",3,"t","cancelar un meteor con salto o up-B en el momento justo (pulsar antes de tiempo lo impide)","X/Y o up-B tras el meteor"],
-    ["Amsah tech",4,"t","ASDI abajo + tech para tecnear en el suelo un golpe que te tumbaría","abajo + L/R al recibir el golpe"],
-  ]},
-]},
-{ id:"tech", name:"Tech y suelo", desc:"qué pasa cuando caes al suelo tras un golpe", subs:[
-  { name:"Tecnear", items:[
-    ["Tech",1,"t","levantarte al instante al tocar suelo en tumble, sin quedar tumbado","L/R justo antes de tocar suelo"],
-    ["Tech in place",1,"t","tech sin moverte","L/R sin dirección"],
-    ["Tech roll",1,"t","tech rodando hacia un lado","L/R + lado"],
-    ["Wall tech",2,"t","tech contra una pared","L/R al chocar con la pared"],
-    ["Wall tech jump",3,"t","tech contra la pared y salto a la vez","L/R + salto contra la pared"],
-    ["Ceiling tech",3,"t","tech contra el techo o la parte de abajo de una plataforma","L/R al chocar arriba"],
-  ]},
-  { name:"Tumbado en el suelo", items:[
-    ["Missed tech",1,"c","no tecnear: rebotas y quedas tumbado un rato antes de poder elegir","—"],
-    ["Neutral getup",1,"t","levantarse en el sitio","stick arriba"],
-    ["Getup roll",1,"t","rodar para levantarte","stick a un lado"],
-    ["Getup attack",1,"t","levantarte golpeando a ambos lados","A"],
-    ["Jab reset",2,"t","golpe débil a un rival tumbado que le obliga a levantarse sin elegir","jab al rival en el suelo"],
-  ]},
-  { name:"Perseguir", items:[
-    ["Tech chase",2,"c","seguir y castigar la opción de tech o levantada del rival","—"],
-  ]},
-]},
-{ id:"borde", name:"Borde y recuperación", desc:"volver al escenario y no dejar volver al rival", subs:[
-  { name:"En el borde", items:[
-    ["Ledge grab",1,"t","agarrarse al borde al acercarte cayendo","acercarse cayendo de cara al borde"],
-    ["Ledge intangibility",2,"c","al agarrar el borde eres intangible un tiempo, y también al principio de cada opción para levantarte","—"],
-    ["Ledge getup",1,"t","subir al escenario de pie","stick hacia el escenario"],
-    ["Ledge roll",1,"t","subir rodando hacia dentro","L/R"],
-    ["Ledge attack",1,"t","subir golpeando","A"],
-    ["Ledge jump",1,"t","subir saltando","X/Y o stick arriba"],
-    ["Ledge options +100%",2,"c","con 100 % o más, las opciones del borde son más lentas","—"],
-    ["Ledge drop",1,"t","soltarse del borde","stick abajo o hacia fuera"],
-    ["Ledge hop",2,"t","soltarse, doble salto y aéreo hacia el escenario","soltar → X/Y → aéreo"],
-    ["Ledgedash",3,"t","soltarse, doble salto y waveland al escenario conservando la intangibilidad","soltar → X/Y → L/R diagonal al escenario"],
-    ["GALINT",3,"c","frames en los que estás en el escenario, intangible y pudiendo actuar tras un ledgedash","—"],
-    ["No-impact land",4,"t","llegar al escenario con el doble salto sin lag de aterrizaje (algunos personajes)","soltar → X/Y → fast fall breve"],
-    ["Ledgestall",3,"t","soltarse y volver a agarrar el borde para alargar la intangibilidad","soltar → volver a agarrar"],
-    ["Ledgehog",2,"t","ocupar el borde para que el rival no pueda agarrarlo","agarrar el borde antes que él"],
-  ]},
-  { name:"Volver al escenario", items:[
-    ["Recovery",1,"c","volver tras salir despedido usando DI, deriva, saltos y up-B","—"],
-    ["Up-B recovery",1,"t","el up-B como último salto de recuperación; después caes indefenso","up-B"],
-    ["Ledge sweetspot",1,"t","acabar la recuperación agarrando el borde directamente, donde es difícil golpearte","up-B apuntando al borde desde abajo"],
-    ["Recovery mixup",2,"c","variar: alto, bajo, al borde, al escenario, con o sin doble salto","—"],
-    ["Two-frame",3,"c","los frames vulnerables al llegar al borde tras un up-B; ahí el rival puede golpearte","—"],
-  ]},
-  { name:"Sacar al rival", items:[
-    ["Edgeguard",2,"c","impedir que el rival vuelva al escenario","—"],
-    ["Ledgetrap",2,"c","cubrir desde el escenario las opciones del rival cuando está agarrado al borde","—"],
-  ]},
-]},
-{ id:"plataformas", name:"Plataformas", desc:"subir, bajar y pelear encima de las plataformas", subs:[
-  { name:"Moverse", items:[
-    ["Platform drop",1,"t","bajar atravesando la plataforma","stick abajo encima de ella"],
-    ["Fall through platform",2,"t","caer a través de una plataforma sin aterrizar en ella","mantener abajo al caer"],
-    ["Shield drop",3,"t","bajar de la plataforma directamente desde el escudo, más rápido que soltarlo","escudo → stick abajo en diagonal (muesca)"],
-    ["Drop cancel",4,"t","bajar de la plataforma y golpear con un aéreo para volver a aterrizar al instante","platform drop → aéreo en el frame exacto"],
-  ]},
-  { name:"Situaciones", items:[
-    ["Slideoff DI",3,"t","escaparte resbalando de la plataforma al recibir un golpe, quedando libre","C-stick abajo + stick hacia el borde"],
-    ["Platform tech chase",2,"c","perseguir los tech del rival encima de una plataforma","—"],
-    ["Platform camping",2,"c","usar las plataformas para esquivar y esperar el error del rival","—"],
-  ]},
-]},
-{ id:"estrategia", name:"Estrategia", desc:"cómo se piensa una partida: fases, distancias y lecturas", subs:[
-  { name:"Fases de la partida", items:[
-    ["Neutral",1,"c","nadie tiene ventaja; ambos buscan el primer golpe","—"],
-    ["Punish",1,"c","sacar el máximo partido del golpe que has conseguido","—"],
-    ["Advantage",1,"c","tienes ventaja: el rival está en el aire, fuera o tumbado","—"],
-    ["Disadvantage",1,"c","estás en desventaja: el objetivo es volver a neutral sin perder mucho","—"],
-    ["Reset to neutral",2,"c","salir de una mala situación y volver a empezar sin perder la vida","—"],
-  ]},
-  { name:"Neutral", items:[
-    ["Spacing",1,"c","estar a la distancia justa para golpear sin que te golpeen","—"],
-    ["Stage control",1,"c","dominar el centro y empujar al rival hacia el borde","—"],
-    ["Approach",1,"c","la forma de acercarte; mejor con opciones seguras","—"],
-    ["Whiff punish",2,"c","castigar un ataque que el rival ha fallado","—"],
-    ["Bait",2,"c","provocar una reacción del rival para castigarla","—"],
-    ["Safe on shield",2,"c","ataque que el rival no puede castigar aunque lo bloquee","—"],
-    ["Zoning",2,"c","controlar el espacio con proyectiles o golpes largos","—"],
-  ]},
-  { name:"Leer al rival", items:[
-    ["Reaction",2,"c","responder a lo que ves","—"],
-    ["Read",2,"c","adelantarse a lo que crees que hará","—"],
-    ["Habits",2,"c","las costumbres del rival, sobre todo en desventaja (tech, borde, escudo)","—"],
-    ["Conditioning",2,"c","repetir algo para crear un hábito en el rival y luego cambiar","—"],
-    ["Mixup",1,"c","variar tus opciones para no ser predecible","—"],
-    ["Option coverage",3,"c","elegir la acción que cubre varias opciones del rival a la vez","—"],
-  ]},
-  { name:"Castigar", items:[
-    ["Combo",1,"c","golpes encadenados","—"],
-    ["True combo",2,"c","encadenado del que el rival no puede escapar de ninguna manera","—"],
-    ["Kill confirm",2,"c","golpe que asegura un golpe final","—"],
-  ]},
-]},
-{ id:"frames", name:"Frames y mecánicas", desc:"el idioma de los datos: entender por qué algo es seguro o no", subs:[
-  { name:"Tiempo", items:[
-    ["Frame",1,"c","1/60 de segundo; Melee va a 60 frames por segundo","—"],
-    ["Startup",1,"c","frames hasta que el golpe empieza a hacer daño","—"],
-    ["Active frames",1,"c","frames en los que el golpe puede conectar","—"],
-    ["Endlag",1,"c","frames tras el golpe en los que aún no puedes actuar","—"],
-    ["IASA",2,"c","el frame desde el que puedes actuar aunque la animación siga","—"],
-    ["Landing lag",1,"c","lag al aterrizar en mitad de un aéreo; se reduce con L-cancel","—"],
-    ["Frame advantage",2,"c","quién puede actuar antes tras un intercambio; decide si algo es seguro","—"],
-    ["Frame data",2,"c","las tablas con los frames de cada movimiento","—"],
-    ["Input buffer",2,"c","Melee casi no guarda pulsaciones adelantadas: hay que acertar el frame","—"],
-  ]},
-  { name:"Cuerpos y golpes", items:[
-    ["Hitbox",1,"c","la zona que golpea","—"],
-    ["Hurtbox",1,"c","la zona en la que te pueden golpear","—"],
-    ["Intangibility",3,"c","intangible: los golpes te atraviesan sin tocarte","—"],
-    ["Invincibility",3,"c","invencible: te tocan pero no te hacen daño","—"],
-    ["Stale moves",2,"c","repetir un mismo ataque reduce su daño y su impulso","—"],
-  ]},
-  { name:"Personajes", items:[
-    ["Weight",2,"c","los pesados salen menos lejos; los ligeros, más","—"],
-    ["Fall speed",2,"c","velocidad de caída: decide qué combos funcionan sobre cada personaje","—"],
-    ["Fastfallers",2,"c","personajes que caen muy rápido (Fox, Falco, Falcon): muy combeables","—"],
-    ["Floaties",2,"c","personajes que caen lento (Peach, Jigglypuff): difíciles de encadenar","—"],
-  ]},
-]},
-{ id:"mando", name:"Mando", desc:"qué hace cada botón y lo que importa del hardware", subs:[
+{ id:"m-botones", name:"Botones", desc:"ataques, especiales y saltos", color:"#26a69a", subs:[
   { name:"Botones", items:[
-    ["GameCube controls",1,"c","A ataque · B especial · X/Y salto · L/R escudo y air dodge · Z agarre · C-stick smash y aéreos","—"],
-    ["Analog triggers",2,"c","L y R tienen recorrido: a medias dan light shield; el clic final da escudo completo","—"],
-    ["Z button",2,"c","agarre en el suelo; en el aire también sirve para el L-cancel","—"],
-    ["C-stick",1,"c","smash en el suelo, aéreos en el aire; también sirve para DI y ASDI","—"],
-    ["PS4 controls",1,"c","tu mando: A ✕ · B ▢ · X ◯ · Y △ · Z R1 · L/R L2/R2 (gatillos) · Start Options · C-stick stick derecho · D-pad cruceta","—"],
-    ["Quit match",1,"t","salir de una partida offline y volver a la selección de personaje","pausa con Start → mantener L + R + A → Start"],
-    ["Rumble",1,"c","la vibración se suele desactivar","—"],
+    ["Full hop", 1, "m", "salto completo", "mantener X/Y"],
+    ["Double jump", 1, "m", "segundo salto en el aire; no lo recuperas hasta tocar suelo o agarrar el borde", "X/Y en el aire"],
+    ["Jab", 1, "m", "golpe rápido parado; corta presión y empieza combos", "A"],
+    ["Tilts", 1, "m", "ataques de suelo dirigidos (forward, up y down tilt)", "stick suave + A"],
+    ["Smash attacks", 1, "m", "ataques fuertes de suelo; se pueden cargar", "stick fuerte + A, o C-stick"],
+    ["Dash attack", 1, "m", "ataque corriendo; muy arriesgado si falla", "A durante dash o carrera"],
+    ["Aerials", 1, "m", "ataques en el aire: nair, fair, bair, uair y dair", "A + dirección en el aire"],
+    ["C-stick aerials", 1, "m", "sacar los aéreos con el C-stick para no mover el stick y no estropear la deriva ni el fast fall", "C-stick en el aire"],
+    ["Specials", 1, "m", "ataques especiales: neutral, side, up y down B", "B + dirección"],
+  ]},
+]},
+{ id:"m-gatillos", name:"Gatillos y R1", desc:"escudo, esquivas y agarres", color:"#5c6bc0", subs:[
+  { name:"Gatillos y R1", items:[
+    ["Shield", 1, "m", "burbuja que bloquea golpes; se encoge con el uso y se regenera al soltarla", "L/R"],
+    ["Light shield", 2, "m", "escudo más grande y transparente: cubre mejor pero aguanta menos y te empuja más", "gatillo apretado a medias"],
+    ["Air dodge", 1, "m", "esquiva en el aire en la dirección que marques; después quedas en special fall", "L/R en el aire + dirección"],
+    ["Spot dodge", 1, "m", "esquiva en el sitio", "escudo + abajo"],
+    ["Roll", 1, "m", "rodar a un lado; predecible si abusas", "escudo + lado"],
+    ["Grab", 1, "m", "agarre de parado; atraviesa el escudo", "Z (o escudo + A)"],
+    ["Dash grab", 1, "m", "agarre corriendo; más alcance hacia delante pero más lento y con más lag", "Z corriendo"],
+    ["Shield grab", 1, "m", "agarrar directamente desde el escudo; la respuesta más común a un ataque bloqueado", "escudo + A"],
+    ["Pummel", 1, "m", "golpes pequeños mientras sujetas; daño extra", "A durante el agarre"],
+    ["Throws", 1, "m", "lanzamientos hacia delante, atrás, arriba o abajo", "stick durante el agarre"],
+  ]},
+]},
+{ id:"m-borde", name:"Borde", desc:"las opciones básicas al estar agarrado al borde", color:"#ef6c00", subs:[
+  { name:"Borde", items:[
+    ["Ledge grab", 1, "m", "agarrarse al borde al acercarte cayendo", "acercarse cayendo de cara al borde"],
+    ["Ledge getup", 1, "m", "subir al escenario de pie", "stick hacia el escenario"],
+    ["Ledge roll", 1, "m", "subir rodando hacia dentro", "L/R"],
+    ["Ledge attack", 1, "m", "subir golpeando", "A"],
+    ["Ledge jump", 1, "m", "subir saltando", "X/Y o stick arriba"],
+    ["Ledge drop", 1, "m", "soltarse del borde", "stick abajo o hacia fuera"],
+  ]},
+]},
+{ id:"mando", name:"El mando", desc:"qué es cada pieza, tu configuración y ajustes", color:"#8e24aa", subs:[
+  { name:"Botones", items:[
+    ["GameCube controls", 1, "m", "A ataque · B especial · X/Y salto · L/R escudo y air dodge · Z agarre · C-stick smash y aéreos", "—"],
+    ["Analog triggers", 2, "m", "L y R tienen recorrido: a medias dan light shield; el clic final da escudo completo", "—"],
+    ["Z button", 2, "m", "agarre en el suelo; en el aire también sirve para el L-cancel", "—"],
+    ["C-stick", 1, "m", "smash en el suelo, aéreos en el aire; también sirve para DI y ASDI", "—"],
+    ["PS4 controls", 1, "m", "tu mando: A ✕ · B ▢ · X ○ · Y △ · Z R1 · L/R L2/R2 (gatillos) · Start Options · C-stick stick derecho · D-pad cruceta", "—"],
+    ["Quit match", 1, "m", "salir de una partida offline y volver a la selección de personaje", "pausa con Start → mantener L + R + A → Start"],
+    ["Rumble", 1, "m", "la vibración se suele desactivar", "—"],
   ]},
   { name:"Hardware", items:[
-    ["Notches",3,"c","muescas en la plantilla del stick que fijan ángulos (wavedash, shield drop)","—"],
-    ["UCF",2,"c","arreglo que hace fiables el dashback y el shield drop en cualquier mando; viene por defecto en Slippi","—"],
-    ["Controller choice",2,"c","juega siempre con el mismo mando; con los controles de la Steam Deck la técnica se calibra distinto que con un mando GameCube","—"],
+    ["Notches", 3, "m", "muescas en la plantilla del stick que fijan ángulos (wavedash, shield drop)", "—"],
+    ["UCF", 2, "m", "arreglo que hace fiables el dashback y el shield drop en cualquier mando; viene por defecto en Slippi", "—"],
+    ["Controller choice", 2, "m", "juega siempre con el mismo mando; con los controles de la Steam Deck la técnica se calibra distinto que con un mando GameCube", "—"],
   ]},
 ]},
-{ id:"reglas", name:"Reglas y escenarios", desc:"cómo se juega en competición", subs:[
+{ id:"suelo", name:"Movimiento en suelo", desc:"cómo te desplazas por el escenario — la base de todo lo demás", color:"#2979ff", subs:[
+  { name:"Desplazarse", items:[
+    ["Run cancel", 2, "t", "cortar la carrera agachándote para poder atacar, agarrar o protegerte antes", "corriendo → stick abajo"],
+  ]},
+  { name:"Dash dance", items:[
+    ["Dash dance", 1, "t", "encadenar dashes a izquierda y derecha para amenazar, esquivar y engañar", "stick de lado a lado, a fondo, rápido"],
+    ["Dashback", 2, "t", "dar la vuelta durante el dash inicial; es lo que hace posible el dash dance", "stick al lado contrario dentro del dash (UCF lo hace fiable)"],
+    ["Long dash dance", 2, "t", "dashes completos para cubrir mucho terreno", "dejar que cada dash recorra toda su distancia"],
+    ["Tight dash dance", 2, "t", "dashes muy cortos para amenazar sin moverte casi del sitio", "cambiar de lado en los primeros frames de cada dash"],
+    ["Foxtrot", 2, "t", "encadenar dashes iniciales en la misma dirección sin pasar a correr", "dash → soltar → dash otra vez al mismo lado"],
+  ]},
+  { name:"Avanzado", items:[
+    ["Pivot", 3, "t", "quedarte quieto mirando al otro lado justo tras un dash, listo para atacar como si estuvieras parado", "dash → stick al lado contrario en el frame justo"],
+    ["Pivot tilt", 3, "t", "pivot seguido de un tilt; ataque rápido mientras te alejas", "pivot → tilt"],
+    ["Moonwalk", 4, "t", "deslizarse hacia atrás con la animación de dash; más estilo que utilidad", "media luna con el stick durante el dash"],
+  ]},
+]},
+{ id:"aire", name:"Saltos y aire", desc:"despegar, moverse en el aire y caer cuando tú decides", color:"#00b8d4", subs:[
+  { name:"Saltar", items:[
+    ["Jumpsquat", 1, "c", "los frames de agacharse antes de despegar (de 3 a 9 según el personaje); en ellos puedes cancelar el salto", "—"],
+    ["Short hop", 1, "t", "salto corto; la base de casi todos los ataques aéreos en el suelo", "pulsar y soltar X/Y antes de despegar"],
+  ]},
+  { name:"Controlar la caída", items:[
+    ["Fast fall", 1, "t", "caer mucho más rápido, para aterrizar antes o bajar a tiempo", "stick abajo tras el punto más alto del salto"],
+    ["Delayed fast fall", 2, "t", "retrasar el fast fall para cambiar el momento de tu aterrizaje y engañar", "esperar y luego stick abajo"],
+    ["Special fall", 1, "c", "caída indefensa tras un air dodge en el aire o un up-B; solo puedes desplazarte un poco y agarrar el borde", "—"],
+  ]},
+]},
+{ id:"wavedash", name:"Air dodge y wavedash", desc:"la esquiva aérea y el deslizamiento que define el movimiento de Melee", color:"#aa00ff", subs:[
+  { name:"Air dodge", items:[
+    ["Air dodge recovery", 2, "t", "usar el air dodge para acercarte al escenario como recuperación", "L/R hacia el escenario"],
+  ]},
+  { name:"Wavedash", items:[
+    ["Wavedash", 2, "t", "air dodge en diagonal contra el suelo justo al despegar: deslizas sin dejar de estar en el suelo y puedes hacer cualquier cosa de suelo", "salto → L/R + diagonal abajo, al despegar"],
+    ["Wavedash back", 2, "t", "wavedash hacia atrás: retirarte sin dejar de mirar al rival", "salto → L/R + diagonal abajo-atrás"],
+    ["Wavedash angle", 2, "c", "cuanto más horizontal la diagonal, más lejos deslizas; cuanto más vertical, más corto", "—"],
+    ["Perfect wavedash", 3, "t", "el ángulo más horizontal posible, para el máximo recorrido", "diagonal casi horizontal (muesca)"],
+    ["Wavedash out of shield", 2, "t", "salir del escudo deslizándote, para castigar o escapar", "escudo → salto → L/R diagonal abajo"],
+    ["Wavedash off ledge", 3, "t", "wavedash que te saca del escenario o plataforma, cayendo sin lag", "wavedash hacia el borde"],
+    ["Traction", 2, "c", "de la tracción del personaje depende cuánto desliza: Luigi muchísimo, otros muy poco", "—"],
+  ]},
+  { name:"Waveland", items:[
+    ["Waveland", 2, "t", "air dodge diagonal al aterrizar desde el aire: aterrizas al instante y deslizas", "cayendo → L/R diagonal abajo al tocar suelo"],
+    ["Waveland on platform", 2, "t", "waveland para subir o bajar de plataformas sin lag", "L/R diagonal al llegar a la plataforma"],
+  ]},
+]},
+{ id:"ataques", name:"Ataques y cancelaciones", desc:"qué golpes hay y cómo quitarles el tiempo muerto", color:"#ff5722", subs:[
+  { name:"Tipos de ataque", items:[
+    ["Turnaround tilt", 2, "t", "girarse y hacer un tilt hacia el otro lado", "toque atrás → tilt"],
+  ]},
+  { name:"Reducir el lag", items:[
+    ["L-cancel", 1, "t", "reduce a la mitad el lag de aterrizaje de un aéreo", "L, R o Z poco antes de aterrizar (unos 7 frames)"],
+    ["SHFFL", 2, "t", "short hop + aéreo + fast fall + L-cancel: el aéreo más rápido y seguro posible", "short hop → aéreo → abajo → L"],
+    ["Auto-cancel", 2, "c", "algunos aéreos no tienen lag de aterrizaje si tocas suelo al principio o al final del movimiento", "—"],
+    ["Edge cancel", 3, "t", "caer por el borde de una plataforma o del escenario durante el lag de aterrizaje para cancelarlo", "aterrizar cerca del borde deslizando hacia él"],
+  ]},
+  { name:"Desde la carrera", items:[
+    ["Jump-cancelled grab", 2, "t", "usar el agarre de parado (mejor) mientras corres: saltas y agarras antes de despegar", "dash → salto → Z al instante"],
+    ["Jump-cancelled up smash", 2, "t", "up smash mientras corres, cancelando el salto", "dash → salto → up smash al instante"],
+    ["Boost grab", 3, "t", "dash attack cancelado al momento en un dash grab con impulso; agarre más largo", "dash attack → Z en los primeros frames"],
+  ]},
+]},
+{ id:"escudo", name:"Escudo", desc:"defenderse y salir del escudo con algo útil", color:"#2ecc40", subs:[
+  { name:"El escudo", items:[
+    ["Shield tilt", 2, "t", "inclinar el escudo para tapar la zona que te atacan", "stick con el escudo puesto"],
+    ["Powershield", 3, "t", "escudo levantado justo cuando llega el golpe; no pierdes escudo y reflejas proyectiles", "L/R en el instante del impacto"],
+    ["Shieldstun", 2, "c", "tiempo que te quedas bloqueado al parar un golpe; más con light shield", "—"],
+    ["Shield poke", 2, "c", "golpe a una parte del cuerpo que el escudo ya no cubre", "—"],
+    ["Shield break", 1, "c", "si el escudo se vacía, se rompe y quedas aturdido sin poder hacer nada", "—"],
+    ["Shield pressure", 2, "c", "encadenar ataques seguros sobre el escudo rival para forzarle a actuar", "—"],
+    ["Shield drop lag", 2, "c", "soltar el escudo tarda 15 frames en Melee; por eso se sale de él con otras acciones", "—"],
+  ]},
+  { name:"Salir del escudo (OoS)", items:[
+    ["Jump out of shield", 1, "t", "saltar desde el escudo; posible con todos menos Yoshi", "escudo → X/Y"],
+    ["Aerial out of shield", 2, "t", "saltar desde el escudo y lanzar un aéreo", "escudo → salto → aéreo"],
+    ["Up-B out of shield", 2, "t", "up-B desde el escudo cancelando el salto", "escudo → salto → up-B al instante"],
+    ["Up smash out of shield", 2, "t", "up smash desde el escudo cancelando el salto", "escudo → salto → up smash al instante"],
+  ]},
+]},
+{ id:"agarres", name:"Agarres", desc:"la respuesta al escudo y el inicio de muchos combos", color:"#e91e63", subs:[
+  { name:"Escapar y encadenar", items:[
+    ["Mash out", 1, "t", "soltarse antes de un agarre moviendo stick y botones", "girar el stick y pulsar botones"],
+    ["Grab release", 2, "c", "cuando te sueltas, ambos quedáis en una situación concreta según el personaje", "—"],
+    ["Chaingrab", 3, "c", "volver a agarrar tras un lanzamiento sin que el rival pueda escapar (según personaje y %)", "—"],
+  ]},
+]},
+{ id:"golpes", name:"Recibir golpes", desc:"lo que puedes hacer cuando te pegan: sobrevivir y escapar", color:"#ffb300", subs:[
+  { name:"Al recibir un golpe", items:[
+    ["Knockback", 1, "c", "lo lejos que sales despedido; crece con tu porcentaje", "—"],
+    ["Hitlag", 2, "c", "la congelación de unos frames cuando un golpe conecta; en ella se hace el SDI", "—"],
+    ["Hitstun", 1, "c", "el tiempo tras el golpe en el que no puedes actuar", "—"],
+    ["Tumble", 2, "c", "giro en el aire tras un golpe fuerte; si tocas suelo así sin tecnear, caes tumbado", "—"],
+  ]},
+  { name:"Influir en la trayectoria", items:[
+    ["DI", 1, "t", "inclinar el stick al recibir el golpe cambia el ángulo con el que sales despedido", "stick durante el golpe"],
+    ["Survival DI", 1, "t", "DI perpendicular a la trayectoria para sobrevivir más; en golpes horizontales, hacia arriba y hacia dentro", "stick en diagonal arriba-dentro"],
+    ["Combo DI", 2, "t", "DI para salir del alcance del rival y romper combos", "stick lejos de la continuación del rival"],
+    ["SDI", 3, "t", "desplazarte un poco durante el hitlag para salir de golpes múltiples o evitar el siguiente", "toques repetidos del stick durante el hitlag"],
+    ["ASDI", 3, "c", "el stick o el C-stick sostenidos al acabar el hitlag te desplazan una sola vez", "—"],
+    ["ASDI down", 3, "t", "quedarte pegado al suelo ante golpes débiles para poder responder", "mantener abajo al recibir el golpe"],
+    ["Crouch cancel", 2, "t", "agachado recibes un tercio menos de impulso y puedes contraatacar", "estar agachado antes del golpe"],
+    ["Meteor cancel", 3, "t", "cancelar un meteor con salto o up-B en el momento justo (pulsar antes de tiempo lo impide)", "X/Y o up-B tras el meteor"],
+    ["Amsah tech", 4, "t", "ASDI abajo + tech para tecnear en el suelo un golpe que te tumbaría", "abajo + L/R al recibir el golpe"],
+  ]},
+]},
+{ id:"tech", name:"Tech y suelo", desc:"qué pasa cuando caes al suelo tras un golpe", color:"#6d4c41", subs:[
+  { name:"Tecnear", items:[
+    ["Tech", 1, "t", "levantarte al instante al tocar suelo en tumble, sin quedar tumbado", "L/R justo antes de tocar suelo"],
+    ["Tech in place", 1, "t", "tech sin moverte", "L/R sin dirección"],
+    ["Tech roll", 1, "t", "tech rodando hacia un lado", "L/R + lado"],
+    ["Wall tech", 2, "t", "tech contra una pared", "L/R al chocar con la pared"],
+    ["Wall tech jump", 3, "t", "tech contra la pared y salto a la vez", "L/R + salto contra la pared"],
+    ["Ceiling tech", 3, "t", "tech contra el techo o la parte de abajo de una plataforma", "L/R al chocar arriba"],
+  ]},
+  { name:"Tumbado en el suelo", items:[
+    ["Missed tech", 1, "c", "no tecnear: rebotas y quedas tumbado un rato antes de poder elegir", "—"],
+    ["Neutral getup", 1, "t", "levantarse en el sitio", "stick arriba"],
+    ["Getup roll", 1, "t", "rodar para levantarte", "stick a un lado"],
+    ["Getup attack", 1, "t", "levantarte golpeando a ambos lados", "A"],
+    ["Jab reset", 2, "t", "golpe débil a un rival tumbado que le obliga a levantarse sin elegir", "jab al rival en el suelo"],
+  ]},
+  { name:"Perseguir", items:[
+    ["Tech chase", 2, "c", "seguir y castigar la opción de tech o levantada del rival", "—"],
+  ]},
+]},
+{ id:"borde", name:"Borde y recuperación", desc:"volver al escenario y no dejar volver al rival", color:"#00897b", subs:[
+  { name:"En el borde", items:[
+    ["Ledge intangibility", 2, "c", "al agarrar el borde eres intangible un tiempo, y también al principio de cada opción para levantarte", "—"],
+    ["Ledge options +100%", 2, "c", "con 100 % o más, las opciones del borde son más lentas", "—"],
+    ["Ledge hop", 2, "t", "soltarse, doble salto y aéreo hacia el escenario", "soltar → X/Y → aéreo"],
+    ["Ledgedash", 3, "t", "soltarse, doble salto y waveland al escenario conservando la intangibilidad", "soltar → X/Y → L/R diagonal al escenario"],
+    ["GALINT", 3, "c", "frames en los que estás en el escenario, intangible y pudiendo actuar tras un ledgedash", "—"],
+    ["No-impact land", 4, "t", "llegar al escenario con el doble salto sin lag de aterrizaje (algunos personajes)", "soltar → X/Y → fast fall breve"],
+    ["Ledgestall", 3, "t", "soltarse y volver a agarrar el borde para alargar la intangibilidad", "soltar → volver a agarrar"],
+    ["Ledgehog", 2, "t", "ocupar el borde para que el rival no pueda agarrarlo", "agarrar el borde antes que él"],
+  ]},
+  { name:"Volver al escenario", items:[
+    ["Recovery", 1, "c", "volver tras salir despedido usando DI, deriva, saltos y up-B", "—"],
+    ["Up-B recovery", 1, "t", "el up-B como último salto de recuperación; después caes indefenso", "up-B"],
+    ["Ledge sweetspot", 1, "t", "acabar la recuperación agarrando el borde directamente, donde es difícil golpearte", "up-B apuntando al borde desde abajo"],
+    ["Recovery mixup", 2, "c", "variar: alto, bajo, al borde, al escenario, con o sin doble salto", "—"],
+    ["Two-frame", 3, "c", "los frames vulnerables al llegar al borde tras un up-B; ahí el rival puede golpearte", "—"],
+  ]},
+  { name:"Sacar al rival", items:[
+    ["Edgeguard", 2, "c", "impedir que el rival vuelva al escenario", "—"],
+    ["Ledgetrap", 2, "c", "cubrir desde el escenario las opciones del rival cuando está agarrado al borde", "—"],
+  ]},
+]},
+{ id:"plataformas", name:"Plataformas", desc:"subir, bajar y pelear encima de las plataformas", color:"#7cb342", subs:[
+  { name:"Moverse", items:[
+    ["Platform drop", 1, "t", "bajar atravesando la plataforma", "stick abajo encima de ella"],
+    ["Fall through platform", 2, "t", "caer a través de una plataforma sin aterrizar en ella", "mantener abajo al caer"],
+    ["Shield drop", 3, "t", "bajar de la plataforma directamente desde el escudo, más rápido que soltarlo", "escudo → stick abajo en diagonal (muesca)"],
+    ["Drop cancel", 4, "t", "bajar de la plataforma y golpear con un aéreo para volver a aterrizar al instante", "platform drop → aéreo en el frame exacto"],
+  ]},
+  { name:"Situaciones", items:[
+    ["Slideoff DI", 3, "t", "escaparte resbalando de la plataforma al recibir un golpe, quedando libre", "C-stick abajo + stick hacia el borde"],
+    ["Platform tech chase", 2, "c", "perseguir los tech del rival encima de una plataforma", "—"],
+    ["Platform camping", 2, "c", "usar las plataformas para esquivar y esperar el error del rival", "—"],
+  ]},
+]},
+{ id:"estrategia", name:"Estrategia", desc:"cómo se piensa una partida: fases, distancias y lecturas", color:"#546e7a", subs:[
+  { name:"Fases de la partida", items:[
+    ["Neutral", 1, "c", "nadie tiene ventaja; ambos buscan el primer golpe", "—"],
+    ["Punish", 1, "c", "sacar el máximo partido del golpe que has conseguido", "—"],
+    ["Advantage", 1, "c", "tienes ventaja: el rival está en el aire, fuera o tumbado", "—"],
+    ["Disadvantage", 1, "c", "estás en desventaja: el objetivo es volver a neutral sin perder mucho", "—"],
+    ["Reset to neutral", 2, "c", "salir de una mala situación y volver a empezar sin perder la vida", "—"],
+  ]},
+  { name:"Neutral", items:[
+    ["Spacing", 1, "c", "estar a la distancia justa para golpear sin que te golpeen", "—"],
+    ["Stage control", 1, "c", "dominar el centro y empujar al rival hacia el borde", "—"],
+    ["Approach", 1, "c", "la forma de acercarte; mejor con opciones seguras", "—"],
+    ["Whiff punish", 2, "c", "castigar un ataque que el rival ha fallado", "—"],
+    ["Bait", 2, "c", "provocar una reacción del rival para castigarla", "—"],
+    ["Safe on shield", 2, "c", "ataque que el rival no puede castigar aunque lo bloquee", "—"],
+    ["Zoning", 2, "c", "controlar el espacio con proyectiles o golpes largos", "—"],
+  ]},
+  { name:"Leer al rival", items:[
+    ["Reaction", 2, "c", "responder a lo que ves", "—"],
+    ["Read", 2, "c", "adelantarse a lo que crees que hará", "—"],
+    ["Habits", 2, "c", "las costumbres del rival, sobre todo en desventaja (tech, borde, escudo)", "—"],
+    ["Conditioning", 2, "c", "repetir algo para crear un hábito en el rival y luego cambiar", "—"],
+    ["Mixup", 1, "c", "variar tus opciones para no ser predecible", "—"],
+    ["Option coverage", 3, "c", "elegir la acción que cubre varias opciones del rival a la vez", "—"],
+  ]},
+  { name:"Castigar", items:[
+    ["Combo", 1, "c", "golpes encadenados", "—"],
+    ["True combo", 2, "c", "encadenado del que el rival no puede escapar de ninguna manera", "—"],
+    ["Kill confirm", 2, "c", "golpe que asegura un golpe final", "—"],
+  ]},
+]},
+{ id:"frames", name:"Frames y mecánicas", desc:"el idioma de los datos: entender por qué algo es seguro o no", color:"#d81b60", subs:[
+  { name:"Tiempo", items:[
+    ["Frame", 1, "c", "1/60 de segundo; Melee va a 60 frames por segundo", "—"],
+    ["Startup", 1, "c", "frames hasta que el golpe empieza a hacer daño", "—"],
+    ["Active frames", 1, "c", "frames en los que el golpe puede conectar", "—"],
+    ["Endlag", 1, "c", "frames tras el golpe en los que aún no puedes actuar", "—"],
+    ["IASA", 2, "c", "el frame desde el que puedes actuar aunque la animación siga", "—"],
+    ["Landing lag", 1, "c", "lag al aterrizar en mitad de un aéreo; se reduce con L-cancel", "—"],
+    ["Frame advantage", 2, "c", "quién puede actuar antes tras un intercambio; decide si algo es seguro", "—"],
+    ["Frame data", 2, "c", "las tablas con los frames de cada movimiento", "—"],
+    ["Input buffer", 2, "c", "Melee casi no guarda pulsaciones adelantadas: hay que acertar el frame", "—"],
+  ]},
+  { name:"Cuerpos y golpes", items:[
+    ["Hitbox", 1, "c", "la zona que golpea", "—"],
+    ["Hurtbox", 1, "c", "la zona en la que te pueden golpear", "—"],
+    ["Intangibility", 3, "c", "intangible: los golpes te atraviesan sin tocarte", "—"],
+    ["Invincibility", 3, "c", "invencible: te tocan pero no te hacen daño", "—"],
+    ["Stale moves", 2, "c", "repetir un mismo ataque reduce su daño y su impulso", "—"],
+  ]},
+  { name:"Personajes", items:[
+    ["Weight", 2, "c", "los pesados salen menos lejos; los ligeros, más", "—"],
+    ["Fall speed", 2, "c", "velocidad de caída: decide qué combos funcionan sobre cada personaje", "—"],
+    ["Fastfallers", 2, "c", "personajes que caen muy rápido (Fox, Falco, Falcon): muy combeables", "—"],
+    ["Floaties", 2, "c", "personajes que caen lento (Peach, Jigglypuff): difíciles de encadenar", "—"],
+  ]},
+]},
+{ id:"reglas", name:"Reglas y escenarios", desc:"cómo se juega en competición", color:"#f4511e", subs:[
   { name:"Reglas", items:[
-    ["Ruleset",1,"c","4 vidas, 8 minutos, objetos desactivados, versión NTSC 1.02","—"],
-    ["Starter / counterpick",1,"c","escenarios para la primera partida y para elegir después; cuál es cuál cambia según el torneo","—"],
-    ["Stage striking",1,"c","eliminar escenarios por turnos para decidir el primero","—"],
-    ["Ledge grab limit",1,"c","si se acaba el tiempo, quien supere el límite de agarres al borde pierde (el número varía por torneo)","—"],
-    ["Wobbling",2,"c","agarre infinito de Ice Climbers; prohibido en casi todos los torneos","—"],
+    ["Ruleset", 1, "c", "4 vidas, 8 minutos, objetos desactivados, versión NTSC 1.02", "—"],
+    ["Starter / counterpick", 1, "c", "escenarios para la primera partida y para elegir después; cuál es cuál cambia según el torneo", "—"],
+    ["Stage striking", 1, "c", "eliminar escenarios por turnos para decidir el primero", "—"],
+    ["Ledge grab limit", 1, "c", "si se acaba el tiempo, quien supere el límite de agarres al borde pierde (el número varía por torneo)", "—"],
+    ["Wobbling", 2, "c", "agarre infinito de Ice Climbers; prohibido en casi todos los torneos", "—"],
   ]},
   { name:"Escenarios legales", items:[
-    ["Battlefield",1,"c","tres plataformas y bordes con hueco debajo","—"],
-    ["Final Destination",1,"c","plano, sin plataformas; todo es neutral puro","—"],
-    ["Yoshi's Story",1,"c","el más pequeño, con tres plataformas; se muere antes","—"],
-    ["Dream Land",1,"c","el más grande, plataformas altas; se sobrevive mucho","—"],
-    ["Fountain of Dreams",1,"c","las plataformas laterales suben y bajan","—"],
-    ["Pokémon Stadium",1,"c","grande y con transformaciones; en muchos torneos se juega congelado","—"],
+    ["Battlefield", 1, "c", "tres plataformas y bordes con hueco debajo", "—"],
+    ["Final Destination", 1, "c", "plano, sin plataformas; todo es neutral puro", "—"],
+    ["Yoshi's Story", 1, "c", "el más pequeño, con tres plataformas; se muere antes", "—"],
+    ["Dream Land", 1, "c", "el más grande, plataformas altas; se sobrevive mucho", "—"],
+    ["Fountain of Dreams", 1, "c", "las plataformas laterales suben y bajan", "—"],
+    ["Pokémon Stadium", 1, "c", "grande y con transformaciones; en muchos torneos se juega congelado", "—"],
   ]},
 ]},
-{ id:"herramientas", name:"Herramientas", desc:"con qué se juega y se practica hoy", subs:[
+{ id:"herramientas", name:"Herramientas", desc:"con qué se juega y se practica hoy", color:"#3949ab", subs:[
   { name:"Slippi", items:[
-    ["Slippi",1,"c","Dolphin preparado para jugar online, con repeticiones y matchmaking","—"],
-    ["Rollback",1,"c","conexión online casi sin retraso","—"],
-    ["Unranked / Ranked / Direct",1,"c","partidas sin puntuación, con puntuación, o contra un amigo por código","—"],
-    ["Replays",1,"c","cada partida se guarda sola (.slp); ábrela desde Slippi Launcher para revisarla","—"],
-    ["Replay stats",1,"c","estadísticas de cada partida: neutrales ganadas, aperturas por muerte…","—"],
+    ["Slippi", 1, "c", "Dolphin preparado para jugar online, con repeticiones y matchmaking", "—"],
+    ["Rollback", 1, "c", "conexión online casi sin retraso", "—"],
+    ["Unranked / Ranked / Direct", 1, "c", "partidas sin puntuación, con puntuación, o contra un amigo por código", "—"],
+    ["Replays", 1, "c", "cada partida se guarda sola (.slp); ábrela desde Slippi Launcher para revisarla", "—"],
+    ["Replay stats", 1, "c", "estadísticas de cada partida: neutrales ganadas, aperturas por muerte…", "—"],
   ]},
   { name:"Training Mode", items:[
-    ["Training Mode CE",1,"c","la versión actual del pack de UnclePunch, mantenida por la comunidad","—"],
-    ["Lab",2,"c","entrenamiento libre: guardar posiciones, grabar al rival, ver frames","—"],
-    ["Events",1,"c","ejercicios preparados: ledgedash, wavedash, Eggs-ercise, Amsah tech…","—"],
-    ["OSD",2,"c","indicadores en pantalla: acierto de L-cancel, frames de ledgedash…","—"],
+    ["Training Mode CE", 1, "c", "la versión actual del pack de UnclePunch, mantenida por la comunidad", "—"],
+    ["Lab", 2, "c", "entrenamiento libre: guardar posiciones, grabar al rival, ver frames", "—"],
+    ["Events", 1, "c", "ejercicios preparados: ledgedash, wavedash, Eggs-ercise, Amsah tech…", "—"],
+    ["OSD", 2, "c", "indicadores en pantalla: acierto de L-cancel, frames de ledgedash…", "—"],
   ]},
 ]},
-{ id:"personajes", name:"Solo algunos personajes", desc:"para saber que existen; los verás cuando elijas personaje", subs:[
+{ id:"personajes", name:"Solo algunos personajes", desc:"para saber que existen; los verás cuando elijas personaje", color:"#9e9d24", subs:[
   { name:"Técnicas propias", items:[
-    ["Shine",3,"t","el reflector de Fox y Falco: rapidísimo y cancelable con salto","Fox, Falco"],
-    ["Waveshine",3,"t","shine + wavedash, encadenado","Fox, Falco"],
-    ["Multishine",4,"t","shines encadenados con saltos","Fox, Falco"],
-    ["Short hop laser",3,"t","láser en short hop","Falco, Fox"],
-    ["Double jump cancel",3,"t","atacar justo tras el doble salto para cortar la subida","Ness, Mewtwo, Peach, Yoshi"],
-    ["Float cancel",3,"t","aéreos flotando para aterrizar sin lag","Peach"],
-    ["Wall jump",2,"t","saltar contra la pared","Fox, Falco, Falcon, Sheik, Samus, Mario, Pikachu…"],
-    ["Multiple jumps",2,"c","más de un salto en el aire","Jigglypuff, Kirby"],
-    ["Tether",2,"t","agarrar el borde con el gancho; también aéreo con Z","Link, Young Link, Samus"],
-    ["Rest",2,"t","el golpe de Jigglypuff que mata a muy poco porcentaje","Jigglypuff"],
-    ["Knee",2,"t","fair de Falcon; el punto dulce mata","Captain Falcon"],
-    ["Ken combo",3,"t","fair + dair (meteor) fuera del escenario","Marth"],
-    ["Desync",4,"t","mover a los dos Ice Climbers por separado","Ice Climbers"],
+    ["Shine", 3, "t", "el reflector de Fox y Falco: rapidísimo y cancelable con salto", "Fox, Falco"],
+    ["Waveshine", 3, "t", "shine + wavedash, encadenado", "Fox, Falco"],
+    ["Multishine", 4, "t", "shines encadenados con saltos", "Fox, Falco"],
+    ["Short hop laser", 3, "t", "láser en short hop", "Falco, Fox"],
+    ["Double jump cancel", 3, "t", "atacar justo tras el doble salto para cortar la subida", "Ness, Mewtwo, Peach, Yoshi"],
+    ["Float cancel", 3, "t", "aéreos flotando para aterrizar sin lag", "Peach"],
+    ["Wall jump", 2, "t", "saltar contra la pared", "Fox, Falco, Falcon, Sheik, Samus, Mario, Pikachu…"],
+    ["Multiple jumps", 2, "c", "más de un salto en el aire", "Jigglypuff, Kirby"],
+    ["Tether", 2, "t", "agarrar el borde con el gancho; también aéreo con Z", "Link, Young Link, Samus"],
+    ["Rest", 2, "t", "el golpe de Jigglypuff que mata a muy poco porcentaje", "Jigglypuff"],
+    ["Knee", 2, "t", "fair de Falcon; el punto dulce mata", "Captain Falcon"],
+    ["Ken combo", 3, "t", "fair + dair (meteor) fuera del escenario", "Marth"],
+    ["Desync", 4, "t", "mover a los dos Ice Climbers por separado", "Ice Climbers"],
   ]},
 ]},
 ];
@@ -621,6 +668,113 @@ const ROUTINES_SEED = {
 };
 const ROUTINE_TEMPLATE = [H1("Calentamiento"), H1("Laboratorio"), H1("Contra un dummy"), H1("Partidas")];
 
+// ── ANIMACIONES EN EL MANDO DE PS4 ──
+// Pasos separados por "|". En cada paso: botones (x ✕, o ○, s ▢, t △, r1, l1, r2, l2, opt),
+// gatillos a medias con r2:.4, sticks con ls:e / ls:se / ls:e.5 (dirección y fuerza) o ls:.95,.3 (x,y),
+// duración con @ms y texto tras ". Se mira hacia la derecha.
+const ANIM = {
+  "Walk": 'ls:e.5@1100"stick inclinado a medias → anda|@400',
+  "Dash": '@300|ls:e@700"stick a fondo de golpe → dash|@400',
+  "Run": 'ls:e@1600"mantener a fondo → corre|@400',
+  "Crouch": 'ls:s@1000"stick abajo → agachado|@400',
+  "Turnaround": 'ls:w.35@500"toque suave atrás → se da la vuelta|@600',
+  "Tap jump": 'ls:n@350"stick arriba de golpe → salta|@700',
+  "Air drift": 'o@200"salto|ls:e@600"en el aire: stick a un lado|ls:w@600"o al otro|@400',
+  "Full hop": 'o@600"mantener ○ → salto completo|@600',
+  "Double jump": 'o@250"salto|@400|o@250"○ otra vez en el aire|@600',
+  "Jab": 'x@180"✕|@350|x@180"✕|@600',
+  "Tilts": 'ls:e.5 x@500"adelante suave + ✕ → forward tilt|@300|ls:n.5 x@500"arriba suave + ✕ → up tilt|@300|ls:s.5 x@500"abajo suave + ✕ → down tilt|@500',
+  "Smash attacks": 'ls:e x@500"stick de golpe + ✕|@400|rs:e@500"o solo el stick derecho|@500',
+  "Dash attack": 'ls:e@500"dash|ls:e x@400"✕ corriendo|@600',
+  "Aerials": 'o@200"salto|x@300"✕ → nair|@300|ls:e x@300"adelante + ✕ → fair|@600',
+  "C-stick aerials": 'o@200"salto|rs:e@300"stick derecho adelante → fair|@300|rs:w@300"atrás → bair|@600',
+  "Specials": 's@400"▢ → neutral B|@300|ls:e s@400"lado + ▢|@300|ls:n s@400"arriba + ▢ (up-B)|@300|ls:s s@400"abajo + ▢|@500',
+  "Shield": 'r2@1200"R2 a fondo → escudo|@500',
+  "Light shield": 'r2:.4@1200"R2 a medias → light shield|@500',
+  "Air dodge": 'o@200"salto|r2 ls:e@500"R2 + dirección en el aire|@600',
+  "Spot dodge": 'r2@400"escudo|r2 ls:s@500"+ abajo → esquiva en el sitio|@500',
+  "Roll": 'r2@400"escudo|r2 ls:e@500"+ lado → rueda|@500',
+  "Grab": 'r1@400"R1 → agarre|@600',
+  "Dash grab": 'ls:e@500"dash|ls:e r1@400"R1 corriendo|@600',
+  "Shield grab": 'r2@500"escudo|r2 x@400"+ ✕ → agarre|@600',
+  "Pummel": 'r1@300"agarre|@300|x@180"✕|@250|x@180"✕|@500',
+  "Throws": 'r1@300"agarre|@300|ls:e@400"adelante|@250|ls:w@400"atrás|@250|ls:n@400"arriba|@250|ls:s@400"abajo|@500',
+  "Ledge grab": 'ls:e@1100"cae de cara al borde: se agarra solo|@400',
+  "Ledge getup": 'ls:e@500"stick hacia el escenario → sube|@700',
+  "Ledge roll": 'r2@500"R2 → sube rodando|@700',
+  "Ledge attack": 'x@500"✕ → sube atacando|@700',
+  "Ledge jump": 'o@500"○ (o stick arriba) → sube saltando|@700',
+  "Ledge drop": 'ls:s@500"stick abajo (o hacia fuera) → se suelta|@700',
+  "Analog triggers": 'r2:.4@900"a medias|r2@900"a fondo (clic)|@500',
+  "Z button": 'r1@500"en el suelo: agarre|@300|o@200"en el aire…|r1@200"…sirve para el L-cancel|@500',
+  "C-stick": 'rs:e@400"adelante|@200|rs:n@400"arriba|@200|rs:s@400"abajo|@200|rs:w@400"atrás|@500',
+  "Quit match": 'opt@400"Options: pausa|@400|l2 r2 x@1000"mantener L2 + R2 + ✕|l2 r2 x opt@500"…y Options → sales|@500',
+  "Run cancel": 'ls:e@900"corriendo|ls:s@600"abajo → frena agachado|@400',
+  "Dash dance": 'ls:e@350"derecha|ls:w@350"izquierda|ls:e@350|ls:w@350|@500',
+  "Dashback": 'ls:e@250"dash|ls:w@400"al lado contrario enseguida|@500',
+  "Long dash dance": 'ls:e@550"dash completo|ls:w@550"dash completo al otro lado|ls:e@550|ls:w@550|@500',
+  "Tight dash dance": 'ls:e@150"cambios muy rápidos|ls:w@150|ls:e@150|ls:w@150|ls:e@150|ls:w@150|@500',
+  "Foxtrot": 'ls:e@300"dash|@150"soltar|ls:e@300"dash|@150"soltar|ls:e@300"dash|@500',
+  "Pivot": 'ls:e@220"dash|ls:w@90"contrario justo…|@700"…y soltar: quieto mirando atrás',
+  "Pivot tilt": 'ls:e@220"dash|ls:w@90"pivot|ls:w.5 x@400"tilt|@600',
+  "Moonwalk": 'ls:e@250"dash|ls:se@130|ls:s@130|ls:sw@130|ls:w@350"media luna|@500',
+  "Short hop": 'o@70"toque muy corto de ○|@900"salto corto',
+  "Fast fall": 'o@250"salto|@500"sube…|ls:s@400"al empezar a caer: abajo|@500',
+  "Delayed fast fall": 'o@250"salto|@900"espera…|ls:s@400"abajo, más tarde|@500',
+  "Air dodge recovery": 'r2 ls:w@500"R2 hacia el escenario|@600',
+  "Wavedash": 'o@90"○ salto|r2 ls:se@300"enseguida R2 + diagonal abajo|@700"desliza',
+  "Wavedash back": 'o@90"○ salto|r2 ls:sw@300"R2 + diagonal abajo-atrás|@700"desliza hacia atrás',
+  "Perfect wavedash": 'o@90"○ salto|r2 ls:.96,.28@300"R2 + diagonal casi horizontal|@700"máximo deslizamiento',
+  "Wavedash out of shield": 'r2@400"escudo|r2 o@90"○|r2 ls:se@300"R2 + diagonal abajo|@600',
+  "Wavedash off ledge": 'o@90"○ salto|r2 ls:se@300"wavedash hacia el borde|@700"cae sin lag',
+  "Waveland": 'o@200"salto|@600"cayendo…|r2 ls:se@300"R2 + diagonal al tocar suelo|@600',
+  "Waveland on platform": 'o@200"salto|@500"llegando a la plataforma…|r2 ls:se@300"R2 + diagonal|@600',
+  "Turnaround tilt": 'ls:w.35@250"toque atrás|ls:w.5 x@400"tilt hacia ese lado|@500',
+  "L-cancel": 'o@90"short hop|x@250"aéreo|@400"cayendo…|r2@130"R2 justo antes de tocar suelo|@600',
+  "SHFFL": 'o@70"short hop|x@200"aéreo|ls:s@250"fast fall|ls:s r2@130"R2 al aterrizar|@600',
+  "Edge cancel": 'ls:e@600"aterriza deslizando hacia el borde|@500',
+  "Jump-cancelled grab": 'ls:e@500"dash|ls:e o@70"○|r1@350"R1 al instante|@600',
+  "Jump-cancelled up smash": 'ls:e@500"dash|ls:e o@70"○|rs:n@350"stick derecho arriba al instante|@600',
+  "Boost grab": 'ls:e@500"dash|ls:e x@90"dash attack|r1@350"R1 enseguida|@600',
+  "Shield tilt": 'r2@400"escudo|r2 ls:n@350|r2 ls:e@350|r2 ls:s@350|r2 ls:w@350"inclinar con el stick|@500',
+  "Powershield": '@700"espera el golpe…|r2@180"R2 justo en el impacto|@600',
+  "Jump out of shield": 'r2@400"escudo|r2 o@300"○|@600',
+  "Aerial out of shield": 'r2@400"escudo|o@70"○|x@300"aéreo|@600',
+  "Up-B out of shield": 'r2@400"escudo|o@60"○|ls:n s@400"up-B al instante|@600',
+  "Up smash out of shield": 'r2@400"escudo|o@60"○|rs:n@400"up smash al instante|@600',
+  "Mash out": 'ls:n@100"girar el stick y pulsar|ls:e@100|ls:s@100|ls:w@100|x@100|o@100|ls:n@100|ls:e@100|s@100|@500',
+  "DI": '@400"llega el golpe…|ls:ne@800"stick durante el golpe|@400',
+  "Survival DI": '@400"golpe fuerte hacia fuera…|ls:nw@900"arriba y hacia dentro|@400',
+  "Combo DI": '@400"te golpean…|ls:e@900"lejos de la continuación del rival|@400',
+  "SDI": '@300"durante el hitlag…|ls:e@80|@70|ls:e@80|@70|ls:e@80|@70|ls:e@80"toques repetidos|@500',
+  "ASDI down": 'ls:s@1100"mantener abajo al recibir el golpe|@400',
+  "Crouch cancel": 'ls:s@1100"agachado antes del golpe|@400',
+  "Meteor cancel": '@600"te golpea un meteor…|o@250"○ (o up-B) en el momento justo|@500',
+  "Amsah tech": 'ls:s r2@500"abajo + R2 al recibir el golpe|@500',
+  "Tech": '@500"cayendo tras un golpe…|r2@180"R2 justo antes del suelo|@600',
+  "Tech in place": '@500"cayendo…|r2@180"R2 sin dirección|@600',
+  "Tech roll": '@500"cayendo…|r2 ls:e@250"R2 + lado|@600',
+  "Wall tech": '@500"chocando con la pared…|r2@180"R2|@600',
+  "Wall tech jump": '@500"chocando con la pared…|r2 o@250"R2 + ○|@600',
+  "Ceiling tech": '@500"chocando arriba…|r2@180"R2|@600',
+  "Neutral getup": 'ls:n@500"stick arriba → se levanta|@600',
+  "Getup roll": 'ls:e@500"stick a un lado → rueda|@600',
+  "Getup attack": 'x@500"✕ → se levanta atacando|@600',
+  "Jab reset": 'x@200"jab al rival tumbado|@700',
+  "Ledge hop": 'ls:s@180"soltarse|o@180"○|ls:e x@300"aéreo al escenario|@600',
+  "Ledgedash": 'ls:s@150"soltarse|o@120"○|r2 ls:se@300"R2 + diagonal al escenario|@700',
+  "No-impact land": 'ls:s@150"soltarse|o@180"○|ls:s@180"fast fall breve|@600',
+  "Ledgestall": 'ls:s@180"soltarse|@250|ls:e@250"volver a agarrar|@600',
+  "Ledgehog": 'ls:e@800"agarra el borde antes que él|@500',
+  "Up-B recovery": 'ls:n s@500"arriba + ▢|@600',
+  "Ledge sweetspot": 'ls:ne s@500"up-B apuntando al borde|@600',
+  "Platform drop": 'ls:s@400"abajo encima de la plataforma|@600',
+  "Fall through platform": 'ls:s@1000"mantener abajo al caer|@400',
+  "Shield drop": 'r2@400"escudo sobre la plataforma|r2 ls:sw@250"stick abajo en diagonal|@600',
+  "Drop cancel": 'ls:s@150"bajar|x@250"aéreo al instante|@600',
+  "Slideoff DI": 'rs:s ls:e@800"stick dcho abajo + izq. hacia el borde|@500',
+};
+
 </script>
 <script>
 /* ================= GUÍA ================= */
@@ -637,7 +791,7 @@ const isDark = c=>{ const m = /^#?([0-9a-f]{6})$/i.exec(c); if(!m) return false;
 
 /* --- elementos con su familia --- */
 const ALL = [];
-DATA.forEach((f, fi)=>{ f.color = COLORS[fi % COLORS.length]; f.subs.forEach(s=> s.items.forEach(a=>{ ALL.push({ n: a[0], l: a[1], t: a[2], d: a[3], h: a[4], f, s }); })); });
+DATA.forEach((f, fi)=>{ f.color = f.color || COLORS[fi % COLORS.length]; f.subs.forEach(s=> s.items.forEach(a=>{ ALL.push({ n: a[0], l: a[1], t: a[2], d: a[3], h: a[4], f, s }); })); });
 const famItems = f=> ALL.filter(x=> x.f === f);
 const DR = DRILLS.map(a=> ({ n: a[0], l: a[1], t: 'r', m: a[2], d: a[3], h: '', techs: a[4], f: null }));
 const BYN = new Map(); ALL.forEach(x=> BYN.set(x.n, x));
@@ -693,8 +847,8 @@ function fallback(n){ try{ const t = document.createElement('textarea'); t.value
 
 /* --- navegación --- */
 const body = $('#body'), qIn = $('#q');
-const TABN = { t: 'Técnica', c: 'Conceptos', r: 'Rutinas' }, ALLN = { t: 'Todas las técnicas', c: 'Todos los conceptos' };
-let tab0 = 't'; try{ const v = localStorage.getItem('ml_tab'); if(v === 'c' || v === 'r') tab0 = v; }catch(e){}
+const TABN = { m: 'Mando', t: 'Técnica', c: 'Conceptos', r: 'Rutinas' }, ALLN = { m: 'Todo el mando', t: 'Todas las técnicas', c: 'Todos los conceptos' };
+let tab0 = 't'; try{ const v = localStorage.getItem('ml_tab'); if(v === 'c' || v === 'r' || v === 'm') tab0 = v; }catch(e){}
 
 let stack = [{ t: 'root', ty: tab0 }], pos = 0, q = '', filt = { l: null, pend: false };
 const cur = ()=> stack[pos];
@@ -728,7 +882,8 @@ function renderRoot(){
   const k = ty(), its = ALL.filter(x=> x.t === k), done = its.filter(x=> isDone(x.n)).length;
   const row = (attr, sq, name, n, d)=> `<button class="row" ${attr}><span class="sq" style="${sq}"></span><span class="rn">${esc(name)}</span><span class="rs">${n}${d ? ' · ✓' + d : ''}</span>${CHEV}</button>`;
   const rows = DATA.map(f=>{ const it = ofType(f, k); if(!it.length) return ''; return row(`data-fam="${f.id}"`, 'background:' + f.color, f.name, it.length, it.filter(x=> isDone(x.n)).length); }).join('');
-  body.innerHTML = `<div class="page"><div class="lh">${esc(TABN[k])}<small>✓ ${done} / ${its.length}</small></div><div class="list" style="margin-bottom:12px">${row('data-all="1"', ALLSQ, ALLN[k], its.length, done)}</div><div class="list">${rows}</div></div>`;
+  const padTop = k === 'm' ? `<div class="padbox"><div class="padwrap" id="padm">${PAD}</div><div class="padinfo" id="padinfo"><b>Tu mando</b><span>Toca una pieza para ver qué hace en Melee.</span></div></div>` : '';
+  body.innerHTML = `<div class="page"><div class="lh">${esc(TABN[k])}<small>✓ ${done} / ${its.length}</small></div>${padTop}<div class="list" style="margin-bottom:12px">${row('data-all="1"', ALLSQ, ALLN[k], its.length, done)}</div><div class="list">${rows}</div></div>`;
 }
 
 /* --- filtros y tarjetas --- */
@@ -744,17 +899,151 @@ function card(x, showFam, ri){
     if(x.f && x.f.id === 'personajes') sb += line('<b class="who">Quién</b>', how);
     else { const p = ps(how); sb += p === how ? line(GC + PS, how) : line(GC, how) + line(PS, p); }
   }
-  const acts = `<button class="${d ? 'on' : ''}" data-ck="1" title="Marcar conseguido" aria-label="Marcar conseguido">✓</button>` + (inR ? `<button data-rm="${ri}" title="Quitar de la rutina" aria-label="Quitar de la rutina">×</button>${ri > 0 ? `<button data-up="${ri}" title="Subir" aria-label="Subir">↑</button>` : ''}` : `<button data-add="1" title="Añadir a una rutina" aria-label="Añadir a una rutina">+</button>`);
-  return `<div class="card${d ? ' done' : ''}${inR ? ' rc' : ''}" data-name="${esc(x.n)}" style="background:${NFILL[x.l] || '#e5e5ea'}"><b>${esc(x.n)}</b><span class="an">${esc(x.d)}</span>${sb}<span class="acts">${acts}</span></div>`;
+  const an = ANIM[x.n] ? `<button class="pl" data-play="1" title="Ver en el mando" aria-label="Ver en el mando">▶</button>` : '';
+  const nb = 2 + (inR ? (ri > 0 ? 1 : 0) : 0) + (an ? 1 : 0);
+  const acts = an + `<button class="${d ? 'on' : ''}" data-ck="1" title="Marcar conseguido" aria-label="Marcar conseguido">✓</button>` + (inR ? `<button data-rm="${ri}" title="Quitar de la rutina" aria-label="Quitar de la rutina">×</button>${ri > 0 ? `<button data-up="${ri}" title="Subir" aria-label="Subir">↑</button>` : ''}` : `<button data-add="1" title="Añadir a una rutina" aria-label="Añadir a una rutina">+</button>`);
+  return `<div class="card${d ? ' done' : ''}" data-name="${esc(x.n)}" style="background:${NFILL[x.l] || '#e5e5ea'};min-height:${nb * 34 + 14}px"><b>${esc(x.n)}</b><span class="an">${esc(x.d)}</span>${sb}<span class="acts">${acts}</span></div>`;
 }
 
 /* --- botones de GameCube → mando de PS4 (configuración de Jorge en Dolphin) --- */
-const PSMAP = { 'X/Y': '◯/△', 'L/R': 'L2/R2', 'C-stick': 'stick der.', 'up-B': 'up-B (arriba + ▢)', 'A': '✕', 'B': '▢', 'X': '◯', 'Y': '△', 'Z': 'R1', 'L': 'L2', 'R': 'R2', 'Start': 'Options' };
+const PSMAP = { 'X/Y': '○/△', 'L/R': 'L2/R2', 'C-stick': 'stick der.', 'up-B': 'up-B (arriba + ▢)', 'A': '✕', 'B': '▢', 'X': '○', 'Y': '△', 'Z': 'R1', 'L': 'L2', 'R': 'R2', 'Start': 'Options' };
 function ps(h){
   const keep = [];
   let s = h.replace(/(?<![\wÀ-ÿ-])(X\/Y|L\/R|C-stick|up-B|Start|A|B|X|Y|Z|L|R)(?![\wÀ-ÿ\/-])/g, m=> '\u0001' + (keep.push(PSMAP[m]) - 1) + '\u0002');
   s = s.replace(/\bstick\b/g, 'stick izq.');
   return s.replace(/\u0001(\d+)\u0002/g, (_, i)=> keep[+i]);
+}
+
+/* --- mando de PS4 animado --- */
+const PAD = `<svg class="pad" viewBox="150 52 560 438" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+  <!-- gatillos y botones superiores -->
+  <g data-k="l2" class="pk-trig"><path class="pk-f" d="M236 112 C236 88 252 76 272 76 C292 76 306 88 306 112 Z"/></g>
+  <g data-k="r2" class="pk-trig"><path class="pk-f" d="M554 112 C554 88 568 76 588 76 C608 76 624 88 624 112 Z"/></g>
+  <g data-k="l1"><path class="pk-f" d="M226 132 C226 120 240 114 266 114 C292 114 314 120 318 132 C318 138 312 140 306 140 L236 140 C230 140 226 138 226 132 Z"/></g>
+  <g data-k="r1"><path class="pk-f" d="M542 132 C546 120 568 114 594 114 C620 114 634 120 634 132 C634 138 630 140 624 140 L554 140 C548 140 542 138 542 132 Z"/></g>
+  <!-- cuerpo -->
+  <path d="M430 150 L342 150 C322 150 308 138 268 138 C232 138 208 146 198 172 C184 210 176 286 176 362 C176 420 184 458 212 470 C240 480 262 466 276 444 C292 418 304 392 336 388 L430 388"/>
+  <path d="M430 150 L518 150 C538 150 552 138 592 138 C628 138 652 146 662 172 C676 210 684 286 684 362 C684 420 676 458 648 470 C620 480 598 466 584 444 C568 418 556 392 524 388 L430 388"/>
+  <!-- panel táctil -->
+  <g data-k="touch"><rect class="pk-f" x="346" y="154" width="168" height="92" rx="10"/></g>
+  <!-- share / options -->
+  <g data-k="share"><rect class="pk-f" x="324" y="168" width="11" height="24" rx="5.5"/></g>
+  <g data-k="opt"><rect class="pk-f" x="525" y="168" width="11" height="24" rx="5.5"/></g>
+  <!-- cruceta -->
+  <circle cx="266" cy="236" r="52" stroke-opacity=".35"/>
+  <g data-k="du"><path class="pk-f" d="M256 222 L256 204 Q256 198 262 198 L270 198 Q276 198 276 204 L276 222 L266 232 Z"/></g>
+  <g data-k="dd"><path class="pk-f" d="M256 250 L256 268 Q256 274 262 274 L270 274 Q276 274 276 268 L276 250 L266 240 Z"/></g>
+  <g data-k="dl"><path class="pk-f" d="M252 226 L234 226 Q228 226 228 232 L228 240 Q228 246 234 246 L252 246 L262 236 Z"/></g>
+  <g data-k="dr"><path class="pk-f" d="M280 226 L298 226 Q304 226 304 232 L304 240 Q304 246 298 246 L280 246 L270 236 Z"/></g>
+  <!-- botones de acción -->
+  <circle cx="594" cy="236" r="56" stroke-opacity=".35"/>
+  <g data-k="t"><circle class="pk-f" cx="594" cy="199" r="16"/><path class="pk-s" d="M594 191 L602 205 L586 205 Z" stroke-width="2"/></g>
+  <g data-k="x"><circle class="pk-f" cx="594" cy="273" r="16"/><path class="pk-s" d="M587 266 L601 280 M601 266 L587 280" stroke-width="2"/></g>
+  <g data-k="s"><circle class="pk-f" cx="557" cy="236" r="16"/><rect class="pk-s" x="550" y="229" width="14" height="14" rx="1" stroke-width="2"/></g>
+  <g data-k="o"><circle class="pk-f" cx="631" cy="236" r="16"/><circle class="pk-s" cx="631" cy="236" r="7.5" stroke-width="2"/></g>
+  <!-- botón central -->
+  <g data-k="ps"><circle class="pk-f" cx="430" cy="304" r="12"/></g>
+  <!-- sticks -->
+  <g data-k="ls"><circle cx="346" cy="322" r="42" stroke-opacity=".55"/><path class="pk-dir" d="M346 322 L346 322" stroke-width="4"/><g class="pk-cap"><circle class="pk-f" cx="346" cy="322" r="27"/><circle cx="346" cy="322" r="17" stroke-opacity=".5"/></g></g>
+  <g data-k="rs"><circle cx="514" cy="322" r="42" stroke-opacity=".55"/><path class="pk-dir" d="M514 322 L514 322" stroke-width="4"/><g class="pk-cap"><circle class="pk-f" cx="514" cy="322" r="27"/><circle cx="514" cy="322" r="17" stroke-opacity=".5"/></g></g>
+</svg>
+`;
+const DIRS = { n: [0, -1], s: [0, 1], e: [1, 0], w: [-1, 0], ne: [.71, -.71], nw: [-.71, -.71], se: [.71, .71], sw: [-.71, .71] };
+function vec(s){
+  const xy = s.split(','); if(xy.length === 2) return [+xy[0] || 0, +xy[1] || 0];
+  const m = /^([nsew]{1,2})(\d*\.?\d*)$/.exec(s); if(!m || !DIRS[m[1]]) return null;
+  const k = m[2] ? +m[2] : 1; return [DIRS[m[1]][0] * k, DIRS[m[1]][1] * k];
+}
+function parseAnim(str){
+  let cap = '';
+  return String(str).split('|').map(seg=>{
+    const qi = seg.indexOf('"'); if(qi >= 0){ cap = seg.slice(qi + 1); seg = seg.slice(0, qi); }
+    let d = 400; const at = seg.indexOf('@'); if(at >= 0){ d = +seg.slice(at + 1) || 400; seg = seg.slice(0, at); }
+    const st = { b: {}, ls: null, rs: null, l2: 0, r2: 0, d, c: cap };
+    seg.trim().split(/\s+/).filter(Boolean).forEach(tok=>{
+      const m = /^(ls|rs):(.+)$/.exec(tok); if(m){ st[m[1]] = vec(m[2]); return; }
+      const g = /^(l2|r2)(?::([\d.]+))?$/.exec(tok); if(g){ st[g[1]] = g[2] ? +g[2] : 1; return; }
+      st.b[tok] = 1;
+    });
+    return st;
+  });
+}
+const STICK_C = { ls: [346, 322], rs: [514, 322] };
+function padApply(svg, st){
+  st = st || { b: {}, ls: null, rs: null, l2: 0, r2: 0 };
+  svg.querySelectorAll('[data-k]').forEach(g=>{
+    const k = g.dataset.k;
+    if(k === 'l2' || k === 'r2'){ const a = st[k] || 0; g.classList.toggle('on', a > 0); g.style.setProperty('--a', a ? .35 + .65 * a : 0); g.style.transform = `translateY(${a * 9}px)`; return; }
+    if(k === 'ls' || k === 'rs'){
+      const v = st[k], cap = g.querySelector('.pk-cap'), dir = g.querySelector('.pk-dir'), [cx, cy] = STICK_C[k];
+      g.classList.toggle('on', !!v);
+      cap.style.transform = v ? `translate(${v[0] * 18}px,${v[1] * 18}px)` : '';
+      const m = Math.hypot(v ? v[0] : 0, v ? v[1] : 0) || 1, ux = v ? v[0] / m : 0, uy = v ? v[1] / m : 0, L = 50 + 12 * Math.min(1, m), tx = cx + ux * L, ty = cy + uy * L;
+      dir.setAttribute('d', v ? `M${cx} ${cy} L${tx} ${ty} M${tx - ux * 9 - uy * 6} ${ty - uy * 9 + ux * 6} L${tx} ${ty} L${tx - ux * 9 + uy * 6} ${ty - uy * 9 - ux * 6}` : `M${cx} ${cy} L${cx} ${cy}`);
+      return;
+    }
+    g.classList.toggle('on', !!st.b[k]);
+  });
+}
+/* reproductor */
+const play = $('#play'); let pl = null;
+function openPlay(name){
+  const steps = parseAnim(ANIM[name]); if(!steps.length) return;
+  play.innerHTML = `<div class="pk" role="dialog"><div class="pkh"><span>${esc(name)}</span><button data-plx="1">Cerrar</button></div>
+    <div class="padwrap">${PAD}</div><div class="plcap" id="plcap"></div><div class="pldots" id="pldots">${steps.map((_, i)=> `<i data-i="${i}"></i>`).join('')}</div>
+    <div class="plctl"><button data-pl="prev" aria-label="Paso anterior">‹</button><button data-pl="toggle" id="pltog" aria-label="Pausa">❚❚</button><button data-pl="next" aria-label="Paso siguiente">›</button><span class="sep"></span>${[1, .5, .25].map(s=> `<button class="chip${s === 1 ? ' on' : ''}" data-spd="${s}">${s === 1 ? '1×' : s === .5 ? '½×' : '¼×'}</button>`).join('')}</div></div>`;
+  play.classList.add('open');
+  pl = { steps, i: -1, spd: 1, run: true, t: 0, svg: $('svg', play) };
+  plNext();
+}
+function plShow(i){
+  pl.i = i; const st = pl.steps[i];
+  padApply(pl.svg, st);
+  $('#plcap').textContent = st.c || ' ';
+  play.querySelectorAll('#pldots i').forEach((d, k)=> d.classList.toggle('on', k === i));
+}
+function plNext(){
+  clearTimeout(pl.t);
+  if(pl.i >= pl.steps.length - 1){ padApply(pl.svg, null); pl.i = -1; if(pl.run){ pl.t = setTimeout(plNext, 650 / pl.spd); return; } }
+  plShow(pl.i + 1);
+  if(pl.run) pl.t = setTimeout(plNext, pl.steps[pl.i].d / pl.spd);
+}
+function plSetRun(r){ pl.run = r; $('#pltog').textContent = r ? '❚❚' : '▶'; clearTimeout(pl.t); if(r) pl.t = setTimeout(plNext, 300 / pl.spd); }
+function closePlay(){ if(!play.classList.contains('open')) return; if(pl) clearTimeout(pl.t); pl = null; play.classList.remove('open'); play.innerHTML = ''; }
+play.addEventListener('click', e=>{
+  if(e.target === play || e.target.closest('[data-plx]')){ closePlay(); return; }
+  if(!pl) return;
+  const b = e.target.closest('[data-pl]'), s = e.target.closest('[data-spd]'), dot = e.target.closest('#pldots i');
+  if(s){ pl.spd = +s.dataset.spd; play.querySelectorAll('[data-spd]').forEach(c=> c.classList.toggle('on', c === s)); if(pl.run){ clearTimeout(pl.t); pl.t = setTimeout(plNext, pl.steps[Math.max(pl.i, 0)].d / pl.spd); } return; }
+  if(dot){ plSetRun(false); plShow(+dot.dataset.i); return; }
+  if(!b) return;
+  const a = b.dataset.pl;
+  if(a === 'toggle'){ plSetRun(!pl.run); return; }
+  plSetRun(false);
+  if(a === 'next') plShow(pl.i >= pl.steps.length - 1 ? 0 : pl.i + 1);
+  if(a === 'prev') plShow(pl.i <= 0 ? pl.steps.length - 1 : pl.i - 1);
+});
+/* qué hace cada pieza (portada del Mando) */
+const PADINFO = {
+  x: ['✕ · A en GameCube', 'Ataque: jab, tilts, smash y aéreos. Con escudo: agarre. En el borde: subir atacando.'],
+  s: ['▢ · B en GameCube', 'Especiales: neutral, lado, arriba (up-B, para recuperarte) y abajo.'],
+  o: ['○ · X en GameCube', 'Saltar. Toque corto: short hop. Mantener: full hop.'],
+  t: ['△ · Y en GameCube', 'Saltar, igual que ○.'],
+  r1: ['R1 · Z en GameCube', 'Agarre. En el aire también sirve para el L-cancel.'],
+  r2: ['R2 · R en GameCube', 'Escudo. En el aire: air dodge. Al caer tras un golpe: tech. A medias: light shield.'],
+  l2: ['L2 · L en GameCube', 'Igual que R2: escudo, air dodge y tech.'],
+  l1: ['L1', 'Sin asignar.'],
+  ls: ['Stick izquierdo · stick de control', 'Moverse. A medias anda; de golpe hace dash. Arriba salta; abajo agacha y hace fast fall. También el DI.'],
+  rs: ['Stick derecho · C-stick', 'Smash en el suelo y aéreos en el aire, sin mover al personaje. También DI y ASDI.'],
+  opt: ['Options · Start', 'Pausa. En pausa, L2 + R2 + ✕ y Options para salir de la partida.'],
+  du: ['Cruceta · D-pad', 'Sin uso en las partidas; sirve en los menús.'], dd: 0, dl: 0, dr: 0,
+  share: ['Share', 'Sin uso en Melee.'], touch: ['Panel táctil', 'Sin uso en Melee.'], ps: ['Botón PS', 'Sin uso en Melee.'],
+};
+function padInfo(k){
+  const box = $('#padm'); if(!box) return;
+  const kk = PADINFO[k] === 0 ? 'du' : k, info = PADINFO[kk]; if(!info) return;
+  box.querySelectorAll('[data-k]').forEach(g=> g.classList.toggle('sel', g.dataset.k === k || (kk === 'du' && /^d[udlr]$/.test(g.dataset.k))));
+  $('#padinfo').innerHTML = `<b>${esc(info[0])}</b><span>${esc(info[1])}</span>`;
 }
 
 /* --- pestaña Rutinas --- */
@@ -867,7 +1156,7 @@ function renderSearch(){
     h += `<div class="sf"><a data-fam="${f.id}" style="background:${f.color};color:${isDark(f.color) ? '#fff' : '#1c1c1e'}">${esc(f.name)}</a><small>${its.length}</small></div><div class="grid">${its.map(x=> card(x)).join('')}</div>`;
   });
   if(!shown) h += `<div class="empty">Nada con «${esc(q)}» en ${esc(TABN[k])}.</div>`;
-  const others = ['t', 'c'].filter(o=> o !== k).map(o=> [o, ALL.filter(x=> x.t === o).filter(x=> passes(x) && hit(x)).length]).filter(a=> a[1]);
+  const others = ['m', 't', 'c'].filter(o=> o !== k).map(o=> [o, ALL.filter(x=> x.t === o).filter(x=> passes(x) && hit(x)).length]).filter(a=> a[1]);
   if(others.length) h += `<div class="chips" style="padding-top:16px">${others.map(([o, n])=> `<button class="chip" data-swap="${o}">${n} más en ${esc(TABN[o])} →</button>`).join('')}</div>`;
   body.innerHTML = h + '</div>';
 }
@@ -936,6 +1225,7 @@ document.addEventListener('click', e=>{
   const fam = t.closest('[data-fam]'); if(fam){ go({ t: 'fam', id: fam.dataset.fam }); return; }
   const lv = t.closest('[data-lv]'); if(lv){ const k = +lv.dataset.lv; filt.l = filt.l === k ? null : k; rerender(); return; }
   if(t.closest('[data-all]')){ go({ t: 'all' }); return; }
+  const pk = t.closest('#padm [data-k]'); if(pk){ padInfo(pk.dataset.k); return; }
   const tb = t.closest('[data-tab]'); if(tb){ if(cur().t === 'search'){ stack[pos].ty = tb.dataset.tab; render(true); } else if(!(cur().t === 'root' && ty() === tb.dataset.tab)) go({ t: 'root', ty: tb.dataset.tab }); return; }
   const sw = t.closest('[data-swap]'); if(sw){ stack[pos].ty = sw.dataset.swap; render(true); return; }
   if(t.closest('[data-pend]')){ filt.pend = !filt.pend; rerender(); return; }
@@ -952,6 +1242,7 @@ document.addEventListener('click', e=>{
   const c = t.closest('.card'); if(!c) return;
   const n = c.dataset.name;
   if(t.closest('[data-add]')){ addFlow(n, t.closest('[data-add]')); return; }
+  if(t.closest('[data-play]')){ openPlay(n); return; }
   if(t.closest('[data-ck]')){ const on = toggle(n); if(filt.pend && on || R){ rerender(); } else { c.classList.toggle('done', on); t.closest('[data-ck]').classList.toggle('on', on); } toast(on ? 'Conseguido' : 'Desmarcado'); return; }
   copy(n);
 });
@@ -970,6 +1261,7 @@ document.addEventListener('keydown', e=>{
   if(e.key === 'Enter' && e.target.matches && e.target.matches('[data-rname],.rt1,.rt2')){ e.preventDefault(); e.target.blur(); return; }
   if(e.key !== 'Escape') return;
   if(document.getElementById('ml-gh').classList.contains('open')) return;
+  if(play.classList.contains('open')){ closePlay(); return; }
   if(pick.classList.contains('open')){ closePick(); return; }
   if(menu.classList.contains('open')){ closeMenu(); return; }
   if(lad.classList.contains('open')){ closeLad(); return; }
